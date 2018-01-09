@@ -242,10 +242,10 @@ namespace MsCrmTools.PrivDiscover
 
         private void BtnDisplayRolesClick(object sender, EventArgs e)
         {
+            lvRoles.Items.Clear();
+
             if (lvSelectedPrivileges.Items.Count == 0)
                 return;
-
-            lvRoles.Items.Clear();
 
             var lviList = new List<ListViewItem>();
 
@@ -318,8 +318,8 @@ namespace MsCrmTools.PrivDiscover
                 string entitySchemaName = null;
                 var groupName = string.Empty;
                 var entitiesWithPrivilege = (from emd in entities
-                             where emd.Privileges.Any(p => p.PrivilegeId == privilege.Id)
-                             select emd).ToList();
+                                             where emd.Privileges.Any(p => p.PrivilegeId == privilege.Id)
+                                             select emd).ToList();
                 EntityMetadata entity;
                 if (entitiesWithPrivilege.Count > 0 && entitiesWithPrivilege.Any(g => g.IsActivity.Value))
                 {
@@ -334,7 +334,6 @@ namespace MsCrmTools.PrivDiscover
                         entitySchemaName = entity.SchemaName;
                     }
                 }
-
 
                 if (entity == null)
                 {

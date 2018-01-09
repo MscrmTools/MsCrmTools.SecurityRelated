@@ -53,6 +53,8 @@
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnRemove = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.rdbLevelNone = new System.Windows.Forms.RadioButton();
             this.pbLevelOrg = new System.Windows.Forms.PictureBox();
             this.pbLevelSubDiv = new System.Windows.Forms.PictureBox();
             this.pbLevelDiv = new System.Windows.Forms.PictureBox();
@@ -63,18 +65,16 @@
             this.rdbLevelUser = new System.Windows.Forms.RadioButton();
             this.lblLevelAny = new System.Windows.Forms.Label();
             this.rdbLevelAny = new System.Windows.Forms.RadioButton();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.rdbLevelNone = new System.Windows.Forms.RadioButton();
             this.toolStripMenu.SuspendLayout();
             this.gbPrivileges.SuspendLayout();
             this.gbSelectedPrivileges.SuspendLayout();
             this.gbResultingRoles.SuspendLayout();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbLevelOrg)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbLevelSubDiv)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbLevelDiv)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbLevelUser)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // toolStripMenu
@@ -160,6 +160,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvPrivileges.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader3});
+            this.lvPrivileges.FullRowSelect = true;
             this.lvPrivileges.Location = new System.Drawing.Point(6, 48);
             this.lvPrivileges.Name = "lvPrivileges";
             this.lvPrivileges.Size = new System.Drawing.Size(268, 415);
@@ -215,6 +216,7 @@
             this.lvSelectedPrivileges.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader2,
             this.columnHeader4});
+            this.lvSelectedPrivileges.FullRowSelect = true;
             this.lvSelectedPrivileges.Location = new System.Drawing.Point(6, 48);
             this.lvSelectedPrivileges.Name = "lvSelectedPrivileges";
             this.lvSelectedPrivileges.Size = new System.Drawing.Size(268, 415);
@@ -267,6 +269,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvRoles.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
+            this.lvRoles.FullRowSelect = true;
             this.lvRoles.Location = new System.Drawing.Point(6, 48);
             this.lvRoles.Name = "lvRoles";
             this.lvRoles.Size = new System.Drawing.Size(207, 418);
@@ -320,6 +323,24 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(46, 385);
             this.panel1.TabIndex = 8;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(24, 3);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox1.TabIndex = 11;
+            this.pictureBox1.TabStop = false;
+            // 
+            // rdbLevelNone
+            // 
+            this.rdbLevelNone.AutoSize = true;
+            this.rdbLevelNone.Location = new System.Drawing.Point(4, 5);
+            this.rdbLevelNone.Name = "rdbLevelNone";
+            this.rdbLevelNone.Size = new System.Drawing.Size(14, 13);
+            this.rdbLevelNone.TabIndex = 10;
+            this.rdbLevelNone.UseVisualStyleBackColor = true;
             // 
             // pbLevelOrg
             // 
@@ -413,24 +434,6 @@
             this.rdbLevelAny.TabStop = true;
             this.rdbLevelAny.UseVisualStyleBackColor = true;
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(24, 3);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox1.TabIndex = 11;
-            this.pictureBox1.TabStop = false;
-            // 
-            // rdbLevelNone
-            // 
-            this.rdbLevelNone.AutoSize = true;
-            this.rdbLevelNone.Location = new System.Drawing.Point(4, 5);
-            this.rdbLevelNone.Name = "rdbLevelNone";
-            this.rdbLevelNone.Size = new System.Drawing.Size(14, 13);
-            this.rdbLevelNone.TabIndex = 10;
-            this.rdbLevelNone.UseVisualStyleBackColor = true;
-            // 
             // MainControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -452,11 +455,11 @@
             this.gbResultingRoles.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbLevelOrg)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbLevelSubDiv)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbLevelDiv)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbLevelUser)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
