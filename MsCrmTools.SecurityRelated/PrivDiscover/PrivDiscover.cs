@@ -10,6 +10,7 @@ using MsCrmTools.PrivDiscover.AppCode;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -240,9 +241,17 @@ namespace MsCrmTools.PrivDiscover
 
         #endregion Methods
 
+        public string HelpUrl => "https://github.com/MscrmTools/MsCrmTools.SecurityRelated/wiki";
+
+        public string RepositoryName => "MsCrmTools.SecurityRelated";
+
+        public string UserName => "MscrmTools";
+
         private void BtnDisplayRolesClick(object sender, EventArgs e)
         {
             lvRoles.Items.Clear();
+            lvRoles.Columns.Clear();
+            lvRoles.Columns.Add(new ColumnHeader { Name = "Name", Text = @"Name" });
 
             if (lvSelectedPrivileges.Items.Count == 0)
                 return;
@@ -252,9 +261,11 @@ namespace MsCrmTools.PrivDiscover
             foreach (SecurityRole role in roles.OrderBy(r => r.Name))
             {
                 bool matchPrivileges = false;
+                Dictionary<string, string> privDepths = new Dictionary<string, string>();
 
                 foreach (ListViewItem item in lvSelectedPrivileges.Items)
                 {
+                    string foundDepth = string.Empty;
                     var currentPrivilege = (Privilege)item.Tag;
 
                     if (currentPrivilege.IsNoDepth)
@@ -263,24 +274,43 @@ namespace MsCrmTools.PrivDiscover
                     }
                     else if (currentPrivilege.IsAnyDepth)
                     {
-                        matchPrivileges = role.Privileges.Any(p => p.Id == currentPrivilege.Id);
+                        var privilegeFound = role.Privileges.FirstOrDefault(p => p.Id == currentPrivilege.Id);
+                        if (privilegeFound != null)
+                        {
+                            matchPrivileges = true;
+                            foundDepth = privilegeFound.Depth.ToString();
+                        }
                     }
                     else
                     {
                         matchPrivileges = role.Privileges.Any(p => p.Id == currentPrivilege.Id && currentPrivilege.Depth == p.Depth);
+                        foundDepth = currentPrivilege.Depth.ToString();
                     }
 
                     if (!matchPrivileges)
                     {
                         break;
                     }
+
+                    privDepths.Add(currentPrivilege.Name, foundDepth);
                 }
 
                 if (matchPrivileges)
                 {
                     var item = new ListViewItem(role.Name) { Tag = role.Id, ImageIndex = 0 };
+                    foreach (var pair in privDepths)
+                    {
+                        item.SubItems.Add(pair.Value);
+                    }
+
                     lviList.Add(item);
                 }
+            }
+
+            foreach (ListViewItem item in lvSelectedPrivileges.Items)
+            {
+                var currentPrivilege = (Privilege)item.Tag;
+                lvRoles.Columns.Add(new ColumnHeader { Name = currentPrivilege.Name, Text = currentPrivilege.Name });
             }
 
             lvRoles.Items.AddRange(lviList.ToArray());
@@ -442,6 +472,55 @@ namespace MsCrmTools.PrivDiscover
                 rdbLevelAny.Checked = true;
         }
 
+        private void lvRoles_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        {
+            e.DrawDefault = true;
+        }
+
+        private void lvRoles_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            if (e.ColumnIndex >= 1 && e.SubItem.Text != null)
+            {
+                if (e.Item.Selected)
+                {
+                    e.Graphics.FillRectangle(SystemBrushes.Highlight, e.Bounds);
+                }
+
+                var depth = e.SubItem.Text;
+                int imageIndex = 0;
+                if (depth != string.Empty)
+                {
+                    switch (Enum.Parse(typeof(PrivilegeDepth), depth))
+                    {
+                        case PrivilegeDepth.Local:
+                            imageIndex = 1;
+                            break;
+
+                        case PrivilegeDepth.Basic:
+                            imageIndex = 2;
+                            break;
+
+                        case PrivilegeDepth.Deep:
+                            imageIndex = 3;
+                            break;
+
+                        case PrivilegeDepth.Global:
+                            imageIndex = 4;
+                            break;
+                    }
+                }
+
+                var sourceBmp = new Bitmap(privilegeList.Images[imageIndex]);
+                Rectangle srcRect = new Rectangle(0, 0, 16, 16);
+                Bitmap cropped = sourceBmp.Clone(srcRect, sourceBmp.PixelFormat);
+                e.Graphics.DrawImage(cropped, new Point(e.Bounds.X + (e.Bounds.Width - 16) / 2, e.Bounds.Y));
+            }
+            else
+            {
+                e.DrawDefault = true;
+            }
+        }
+
         private void LvSelectedPrivilegesMouseDoubleClick(object sender, MouseEventArgs e)
         {
             BtnRemoveClick(null, null);
@@ -460,9 +539,5 @@ namespace MsCrmTools.PrivDiscover
             fillPrivThread = new Thread(DoWork);
             fillPrivThread.Start();
         }
-
-        public string RepositoryName => "MsCrmTools.SecurityRelated";
-        public string UserName => "MscrmTools";
-        public string HelpUrl => "https://github.com/MscrmTools/MsCrmTools.SecurityRelated/wiki";
     }
 }
