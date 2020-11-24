@@ -92,8 +92,8 @@ namespace MsCrmTools.UserRolesManager.UserControls
         private void cbbViews_SelectedIndexChanged(object sender, EventArgs e)
         {
             lvUsersAndTeams.Items.Clear();
+            var entName = "Users";
             var viewItem = (ViewItem)cbbViews.SelectedItem;
-
             var entity = QueryHelper.GetItems(viewItem.FetchXml, service);
 
             if (entity.EntityName == "systemuser")
@@ -113,6 +113,8 @@ namespace MsCrmTools.UserRolesManager.UserControls
             }
             else if (entity.EntityName == "team")
             {
+                entName = "Teams";
+
                 lvUsersAndTeams.Items.AddRange(entity.Entities.ToList().Select(record => new ListViewItem
                 {
                     Text = record.GetAttributeValue<string>("name"),
@@ -125,6 +127,20 @@ namespace MsCrmTools.UserRolesManager.UserControls
                     }
                 }).ToArray());
             }
+
+            // tell users how many teams/users in the view
+            labelDetails.Text = $"{entName} total: {lvUsersAndTeams.Items.Count}";
+            labelDetails.Tag = entName;
+        }
+
+        /// <summary>
+        /// Update the selection count for users/teams out of total
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void lvUsersAndTeams_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            labelDetails.Text = $"{labelDetails.Tag.ToString()}: {lvUsersAndTeams.SelectedItems.Count} selected of {lvUsersAndTeams.Items.Count} total";
         }
 
         private void lvUsersAndTeams_ColumnClick(object sender, ColumnClickEventArgs e)
@@ -141,5 +157,6 @@ namespace MsCrmTools.UserRolesManager.UserControls
                 lvUsersAndTeams.ListViewItemSorter = new ListViewItemComparer(e.Column, SortOrder.Ascending);
             }
         }
+
     }
 }

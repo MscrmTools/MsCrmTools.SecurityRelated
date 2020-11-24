@@ -8,5 +8,6 @@ namespace MsCrmTools.UserRolesManager.AppCode
         public int ActionType { get; set; }
         public List<Entity> Principals { get; set; }
         public List<Entity> Roles { get; set; }
+        public int BatchSize { get; set; }
     }
 }
