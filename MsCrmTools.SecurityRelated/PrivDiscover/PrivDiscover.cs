@@ -644,7 +644,8 @@ namespace MsCrmTools.PrivDiscover
             {
                 matchingPrivileges =
                     privileges.Where(
-                        x => x["name"].ToString().ToLower().IndexOf(filterTerm.ToLower(), StringComparison.Ordinal) >= 0);
+                        x => x["name"].ToString().ToLower().IndexOf(filterTerm.ToLower(), StringComparison.Ordinal) >= 0
+                        || entities.Any(e => e.DisplayName?.UserLocalizedLabel?.Label.ToLower().IndexOf(filterTerm.ToLower()) >= 0 && e.Privileges.Any(p => p.PrivilegeId == x.Id)));
             }
             else
             {
