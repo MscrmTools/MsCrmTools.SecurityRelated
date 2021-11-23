@@ -7,6 +7,7 @@ using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.PrivDiscover.AppCode;
+using MsCrmTools.SecurityRelated.Forms;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -199,11 +200,24 @@ namespace MsCrmTools.PrivDiscover
             }
         }
 
-        private void LoadRolesAndPrivs()
+        private void LoadRolesAndPrivs(bool fromSolution)
         {
             lvPrivileges.Items.Clear();
             lvSelectedPrivileges.Items.Clear();
             lvRoles.Items.Clear();
+
+            List<Entity> solutions = new List<Entity>();
+
+            if (fromSolution)
+            {
+                var dialog = new SolutionPicker(Service);
+                if (dialog.ShowDialog(this) != DialogResult.OK)
+                {
+                    return;
+                }
+
+                solutions.AddRange(dialog.SelectedSolutions);
+            }
 
             WorkAsync(new WorkAsyncInfo
             {
@@ -221,7 +235,7 @@ namespace MsCrmTools.PrivDiscover
                     bw.ReportProgress(0, "Retrieving entities privileges...");
 
                     var mdManager = new MetadataManager(Service);
-                    entities = mdManager.GetEntitiesWithPrivileges();
+                    entities = mdManager.GetEntitiesWithPrivileges(solutions);
                 },
                 PostWorkCallBack = e =>
                 {
@@ -239,11 +253,6 @@ namespace MsCrmTools.PrivDiscover
                 },
                 ProgressChanged = e => { SetWorkingMessage(e.UserState.ToString()); }
             });
-        }
-
-        private void TsbLoadRolesAndPrivsClick(object sender, EventArgs e)
-        {
-            ExecuteMethod(LoadRolesAndPrivs);
         }
 
         #endregion Methods
@@ -688,7 +697,22 @@ namespace MsCrmTools.PrivDiscover
                     else if (privilege["name"].ToString().EndsWith("OptionSet"))
                         groupName = "OptionSet";
                     else
+                    {
+                        if (privilege["name"].ToString().StartsWith("prvCreate")
+                            || privilege["name"].ToString().StartsWith("prvRead")
+                            || privilege["name"].ToString().StartsWith("prvWrite")
+                            || privilege["name"].ToString().StartsWith("prvDelete")
+                            || privilege["name"].ToString().StartsWith("prvAppend")
+                            || privilege["name"].ToString().StartsWith("prvAppendTo")
+                            || privilege["name"].ToString().StartsWith("prvAssign")
+                            || privilege["name"].ToString().StartsWith("prvShare")
+                            )
+                        {
+                            continue;
+                        }
+
                         groupName = "_Common";
+                    }
                 }
                 else
                 {
@@ -836,6 +860,18 @@ namespace MsCrmTools.PrivDiscover
         private void LvSelectedPrivilegesMouseDoubleClick(object sender, MouseEventArgs e)
         {
             BtnRemoveClick(null, null);
+        }
+
+        private void tsddbLoad_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (e.ClickedItem == tsmiLoadAll)
+            {
+                ExecuteMethod(LoadRolesAndPrivs, false);
+            }
+            else if (e.ClickedItem == tsmiLoadFromSolution)
+            {
+                ExecuteMethod(LoadRolesAndPrivs, true);
+            }
         }
 
         private void TxtSearchTextChanged(object sender, EventArgs e)

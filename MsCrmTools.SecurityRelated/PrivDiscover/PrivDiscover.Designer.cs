@@ -31,7 +31,9 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainControl));
             this.toolStripMenu = new System.Windows.Forms.ToolStrip();
-            this.tsbLoadRolesAndPrivs = new System.Windows.Forms.ToolStripButton();
+            this.tsddbLoad = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsmiLoadAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiLoadFromSolution = new System.Windows.Forms.ToolStripMenuItem();
             this.toolImageList = new System.Windows.Forms.ImageList(this.components);
             this.gbPrivileges = new System.Windows.Forms.GroupBox();
             this.lblSearch = new System.Windows.Forms.Label();
@@ -43,6 +45,7 @@
             this.btnDisplayRoles = new System.Windows.Forms.Button();
             this.lvSelectedPrivileges = new System.Windows.Forms.ListView();
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.gbResultingRoles = new System.Windows.Forms.GroupBox();
             this.btnOpenSecurityRole = new System.Windows.Forms.Button();
@@ -51,6 +54,7 @@
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnRemove = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.rdbLevelNone = new System.Windows.Forms.RadioButton();
             this.pbLevelOrg = new System.Windows.Forms.PictureBox();
@@ -64,8 +68,6 @@
             this.lblLevelAny = new System.Windows.Forms.Label();
             this.rdbLevelAny = new System.Windows.Forms.RadioButton();
             this.privilegeList = new System.Windows.Forms.ImageList(this.components);
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.toolStripMenu.SuspendLayout();
             this.gbPrivileges.SuspendLayout();
             this.gbSelectedPrivileges.SuspendLayout();
@@ -81,22 +83,38 @@
             // toolStripMenu
             // 
             this.toolStripMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsbLoadRolesAndPrivs});
+            this.tsddbLoad});
             this.toolStripMenu.Location = new System.Drawing.Point(0, 0);
             this.toolStripMenu.Name = "toolStripMenu";
-            this.toolStripMenu.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
-            this.toolStripMenu.Size = new System.Drawing.Size(1558, 37);
+            this.toolStripMenu.Size = new System.Drawing.Size(1530, 46);
             this.toolStripMenu.TabIndex = 2;
             this.toolStripMenu.Text = "toolStrip1";
             // 
-            // tsbLoadRolesAndPrivs
+            // tsddbLoad
             // 
-            this.tsbLoadRolesAndPrivs.Image = ((System.Drawing.Image)(resources.GetObject("tsbLoadRolesAndPrivs.Image")));
-            this.tsbLoadRolesAndPrivs.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbLoadRolesAndPrivs.Name = "tsbLoadRolesAndPrivs";
-            this.tsbLoadRolesAndPrivs.Size = new System.Drawing.Size(267, 34);
-            this.tsbLoadRolesAndPrivs.Text = "Load Roles and Privileges";
-            this.tsbLoadRolesAndPrivs.Click += new System.EventHandler(this.TsbLoadRolesAndPrivsClick);
+            this.tsddbLoad.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiLoadAll,
+            this.tsmiLoadFromSolution});
+            this.tsddbLoad.Image = global::MsCrmTools.SecurityRelated.Properties.Resources.Dataverse_16x16;
+            this.tsddbLoad.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsddbLoad.Name = "tsddbLoad";
+            this.tsddbLoad.Size = new System.Drawing.Size(93, 29);
+            this.tsddbLoad.Text = "Load";
+            this.tsddbLoad.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsddbLoad_DropDownItemClicked);
+            // 
+            // tsmiLoadAll
+            // 
+            this.tsmiLoadAll.Image = global::MsCrmTools.SecurityRelated.Properties.Resources.Dataverse_16x16;
+            this.tsmiLoadAll.Name = "tsmiLoadAll";
+            this.tsmiLoadAll.Size = new System.Drawing.Size(401, 34);
+            this.tsmiLoadAll.Text = "Roles and all privileges";
+            // 
+            // tsmiLoadFromSolution
+            // 
+            this.tsmiLoadFromSolution.Image = global::MsCrmTools.SecurityRelated.Properties.Resources.Dataverse_16x16;
+            this.tsmiLoadFromSolution.Name = "tsmiLoadFromSolution";
+            this.tsmiLoadFromSolution.Size = new System.Drawing.Size(401, 34);
+            this.tsmiLoadFromSolution.Text = "Roles and Privileges from solution(s)";
             // 
             // toolImageList
             // 
@@ -111,11 +129,11 @@
             this.gbPrivileges.Controls.Add(this.lblSearch);
             this.gbPrivileges.Controls.Add(this.txtSearch);
             this.gbPrivileges.Controls.Add(this.lvPrivileges);
-            this.gbPrivileges.Location = new System.Drawing.Point(6, 52);
-            this.gbPrivileges.Margin = new System.Windows.Forms.Padding(6);
+            this.gbPrivileges.Location = new System.Drawing.Point(5, 43);
+            this.gbPrivileges.Margin = new System.Windows.Forms.Padding(5);
             this.gbPrivileges.Name = "gbPrivileges";
-            this.gbPrivileges.Padding = new System.Windows.Forms.Padding(6);
-            this.gbPrivileges.Size = new System.Drawing.Size(513, 866);
+            this.gbPrivileges.Padding = new System.Windows.Forms.Padding(5);
+            this.gbPrivileges.Size = new System.Drawing.Size(420, 722);
             this.gbPrivileges.TabIndex = 3;
             this.gbPrivileges.TabStop = false;
             this.gbPrivileges.Text = "Privileges";
@@ -123,10 +141,10 @@
             // lblSearch
             // 
             this.lblSearch.AutoSize = true;
-            this.lblSearch.Location = new System.Drawing.Point(11, 41);
-            this.lblSearch.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.lblSearch.Location = new System.Drawing.Point(9, 34);
+            this.lblSearch.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblSearch.Name = "lblSearch";
-            this.lblSearch.Size = new System.Drawing.Size(75, 25);
+            this.lblSearch.Size = new System.Drawing.Size(60, 20);
             this.lblSearch.TabIndex = 4;
             this.lblSearch.Text = "Search";
             this.lblSearch.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -136,10 +154,10 @@
             this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSearch.Enabled = false;
-            this.txtSearch.Location = new System.Drawing.Point(97, 35);
-            this.txtSearch.Margin = new System.Windows.Forms.Padding(6);
+            this.txtSearch.Location = new System.Drawing.Point(79, 29);
+            this.txtSearch.Margin = new System.Windows.Forms.Padding(5);
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(402, 29);
+            this.txtSearch.Size = new System.Drawing.Size(330, 26);
             this.txtSearch.TabIndex = 3;
             this.txtSearch.TextChanged += new System.EventHandler(this.TxtSearchTextChanged);
             // 
@@ -151,10 +169,11 @@
             this.lvPrivileges.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader3});
             this.lvPrivileges.FullRowSelect = true;
-            this.lvPrivileges.Location = new System.Drawing.Point(11, 89);
-            this.lvPrivileges.Margin = new System.Windows.Forms.Padding(6);
+            this.lvPrivileges.HideSelection = false;
+            this.lvPrivileges.Location = new System.Drawing.Point(9, 74);
+            this.lvPrivileges.Margin = new System.Windows.Forms.Padding(5);
             this.lvPrivileges.Name = "lvPrivileges";
-            this.lvPrivileges.Size = new System.Drawing.Size(488, 763);
+            this.lvPrivileges.Size = new System.Drawing.Size(400, 636);
             this.lvPrivileges.SmallImageList = this.lvImagesList;
             this.lvPrivileges.TabIndex = 2;
             this.lvPrivileges.UseCompatibleStateImageBehavior = false;
@@ -180,11 +199,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbSelectedPrivileges.Controls.Add(this.btnDisplayRoles);
             this.gbSelectedPrivileges.Controls.Add(this.lvSelectedPrivileges);
-            this.gbSelectedPrivileges.Location = new System.Drawing.Point(711, 52);
-            this.gbSelectedPrivileges.Margin = new System.Windows.Forms.Padding(6);
+            this.gbSelectedPrivileges.Location = new System.Drawing.Point(582, 43);
+            this.gbSelectedPrivileges.Margin = new System.Windows.Forms.Padding(5);
             this.gbSelectedPrivileges.Name = "gbSelectedPrivileges";
-            this.gbSelectedPrivileges.Padding = new System.Windows.Forms.Padding(6);
-            this.gbSelectedPrivileges.Size = new System.Drawing.Size(842, 430);
+            this.gbSelectedPrivileges.Padding = new System.Windows.Forms.Padding(5);
+            this.gbSelectedPrivileges.Size = new System.Drawing.Size(689, 358);
             this.gbSelectedPrivileges.TabIndex = 4;
             this.gbSelectedPrivileges.TabStop = false;
             this.gbSelectedPrivileges.Text = "Selected Privileges";
@@ -193,10 +212,10 @@
             // 
             this.btnDisplayRoles.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDisplayRoles.Location = new System.Drawing.Point(11, 35);
-            this.btnDisplayRoles.Margin = new System.Windows.Forms.Padding(6);
+            this.btnDisplayRoles.Location = new System.Drawing.Point(9, 29);
+            this.btnDisplayRoles.Margin = new System.Windows.Forms.Padding(5);
             this.btnDisplayRoles.Name = "btnDisplayRoles";
-            this.btnDisplayRoles.Size = new System.Drawing.Size(820, 42);
+            this.btnDisplayRoles.Size = new System.Drawing.Size(671, 35);
             this.btnDisplayRoles.TabIndex = 7;
             this.btnDisplayRoles.Text = "Display roles that match the selection\r\n";
             this.btnDisplayRoles.UseVisualStyleBackColor = true;
@@ -212,10 +231,11 @@
             this.columnHeader6,
             this.columnHeader4});
             this.lvSelectedPrivileges.FullRowSelect = true;
-            this.lvSelectedPrivileges.Location = new System.Drawing.Point(11, 89);
-            this.lvSelectedPrivileges.Margin = new System.Windows.Forms.Padding(6);
+            this.lvSelectedPrivileges.HideSelection = false;
+            this.lvSelectedPrivileges.Location = new System.Drawing.Point(9, 74);
+            this.lvSelectedPrivileges.Margin = new System.Windows.Forms.Padding(5);
             this.lvSelectedPrivileges.Name = "lvSelectedPrivileges";
-            this.lvSelectedPrivileges.Size = new System.Drawing.Size(817, 327);
+            this.lvSelectedPrivileges.Size = new System.Drawing.Size(669, 273);
             this.lvSelectedPrivileges.SmallImageList = this.lvImagesList;
             this.lvSelectedPrivileges.TabIndex = 1;
             this.lvSelectedPrivileges.UseCompatibleStateImageBehavior = false;
@@ -226,6 +246,11 @@
             // 
             this.columnHeader2.Text = "Name";
             this.columnHeader2.Width = 120;
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "Operator";
+            this.columnHeader6.Width = 120;
             // 
             // columnHeader4
             // 
@@ -239,11 +264,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbResultingRoles.Controls.Add(this.btnOpenSecurityRole);
             this.gbResultingRoles.Controls.Add(this.lvRoles);
-            this.gbResultingRoles.Location = new System.Drawing.Point(711, 494);
-            this.gbResultingRoles.Margin = new System.Windows.Forms.Padding(6);
+            this.gbResultingRoles.Location = new System.Drawing.Point(582, 412);
+            this.gbResultingRoles.Margin = new System.Windows.Forms.Padding(5);
             this.gbResultingRoles.Name = "gbResultingRoles";
-            this.gbResultingRoles.Padding = new System.Windows.Forms.Padding(6);
-            this.gbResultingRoles.Size = new System.Drawing.Size(842, 429);
+            this.gbResultingRoles.Padding = new System.Windows.Forms.Padding(5);
+            this.gbResultingRoles.Size = new System.Drawing.Size(689, 357);
             this.gbResultingRoles.TabIndex = 5;
             this.gbResultingRoles.TabStop = false;
             this.gbResultingRoles.Text = "Roles that match selection";
@@ -252,10 +277,10 @@
             // 
             this.btnOpenSecurityRole.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOpenSecurityRole.Location = new System.Drawing.Point(11, 35);
-            this.btnOpenSecurityRole.Margin = new System.Windows.Forms.Padding(6);
+            this.btnOpenSecurityRole.Location = new System.Drawing.Point(9, 29);
+            this.btnOpenSecurityRole.Margin = new System.Windows.Forms.Padding(5);
             this.btnOpenSecurityRole.Name = "btnOpenSecurityRole";
-            this.btnOpenSecurityRole.Size = new System.Drawing.Size(820, 42);
+            this.btnOpenSecurityRole.Size = new System.Drawing.Size(671, 35);
             this.btnOpenSecurityRole.TabIndex = 8;
             this.btnOpenSecurityRole.Text = "Open security role";
             this.btnOpenSecurityRole.UseVisualStyleBackColor = true;
@@ -269,11 +294,12 @@
             this.lvRoles.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
             this.lvRoles.FullRowSelect = true;
-            this.lvRoles.Location = new System.Drawing.Point(11, 89);
-            this.lvRoles.Margin = new System.Windows.Forms.Padding(6);
+            this.lvRoles.HideSelection = false;
+            this.lvRoles.Location = new System.Drawing.Point(9, 74);
+            this.lvRoles.Margin = new System.Windows.Forms.Padding(5);
             this.lvRoles.Name = "lvRoles";
             this.lvRoles.OwnerDraw = true;
-            this.lvRoles.Size = new System.Drawing.Size(816, 326);
+            this.lvRoles.Size = new System.Drawing.Size(668, 272);
             this.lvRoles.SmallImageList = this.lvImagesList;
             this.lvRoles.TabIndex = 0;
             this.lvRoles.UseCompatibleStateImageBehavior = false;
@@ -289,10 +315,10 @@
             // btnAdd
             // 
             this.btnAdd.Enabled = false;
-            this.btnAdd.Location = new System.Drawing.Point(532, 439);
-            this.btnAdd.Margin = new System.Windows.Forms.Padding(6);
+            this.btnAdd.Location = new System.Drawing.Point(435, 366);
+            this.btnAdd.Margin = new System.Windows.Forms.Padding(5);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(167, 42);
+            this.btnAdd.Size = new System.Drawing.Size(137, 35);
             this.btnAdd.TabIndex = 6;
             this.btnAdd.Text = ">>";
             this.btnAdd.UseVisualStyleBackColor = true;
@@ -301,10 +327,10 @@
             // btnRemove
             // 
             this.btnRemove.Enabled = false;
-            this.btnRemove.Location = new System.Drawing.Point(532, 87);
-            this.btnRemove.Margin = new System.Windows.Forms.Padding(6);
+            this.btnRemove.Location = new System.Drawing.Point(435, 72);
+            this.btnRemove.Margin = new System.Windows.Forms.Padding(5);
             this.btnRemove.Name = "btnRemove";
-            this.btnRemove.Size = new System.Drawing.Size(167, 42);
+            this.btnRemove.Size = new System.Drawing.Size(137, 35);
             this.btnRemove.TabIndex = 7;
             this.btnRemove.Text = "<<";
             this.btnRemove.UseVisualStyleBackColor = true;
@@ -325,27 +351,44 @@
             this.panel1.Controls.Add(this.rdbLevelUser);
             this.panel1.Controls.Add(this.lblLevelAny);
             this.panel1.Controls.Add(this.rdbLevelAny);
-            this.panel1.Location = new System.Drawing.Point(532, 141);
-            this.panel1.Margin = new System.Windows.Forms.Padding(6);
+            this.panel1.Location = new System.Drawing.Point(435, 117);
+            this.panel1.Margin = new System.Windows.Forms.Padding(5);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(167, 286);
+            this.panel1.Size = new System.Drawing.Size(137, 238);
             this.panel1.TabIndex = 8;
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Equals",
+            "Greater than",
+            "Greater or eq.",
+            "Lower than",
+            "Lower or eq."});
+            this.comboBox1.Location = new System.Drawing.Point(0, 2);
+            this.comboBox1.Margin = new System.Windows.Forms.Padding(2);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(135, 28);
+            this.comboBox1.TabIndex = 12;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(44, 55);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(6);
+            this.pictureBox1.Location = new System.Drawing.Point(36, 46);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(5);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(29, 30);
+            this.pictureBox1.Size = new System.Drawing.Size(24, 25);
             this.pictureBox1.TabIndex = 11;
             this.pictureBox1.TabStop = false;
             // 
             // rdbLevelNone
             // 
             this.rdbLevelNone.AutoSize = true;
-            this.rdbLevelNone.Location = new System.Drawing.Point(7, 58);
-            this.rdbLevelNone.Margin = new System.Windows.Forms.Padding(6);
+            this.rdbLevelNone.Location = new System.Drawing.Point(6, 48);
+            this.rdbLevelNone.Margin = new System.Windows.Forms.Padding(5);
             this.rdbLevelNone.Name = "rdbLevelNone";
             this.rdbLevelNone.Size = new System.Drawing.Size(21, 20);
             this.rdbLevelNone.TabIndex = 10;
@@ -354,48 +397,48 @@
             // pbLevelOrg
             // 
             this.pbLevelOrg.Image = ((System.Drawing.Image)(resources.GetObject("pbLevelOrg.Image")));
-            this.pbLevelOrg.Location = new System.Drawing.Point(44, 230);
-            this.pbLevelOrg.Margin = new System.Windows.Forms.Padding(6);
+            this.pbLevelOrg.Location = new System.Drawing.Point(36, 192);
+            this.pbLevelOrg.Margin = new System.Windows.Forms.Padding(5);
             this.pbLevelOrg.Name = "pbLevelOrg";
-            this.pbLevelOrg.Size = new System.Drawing.Size(29, 30);
+            this.pbLevelOrg.Size = new System.Drawing.Size(24, 25);
             this.pbLevelOrg.TabIndex = 9;
             this.pbLevelOrg.TabStop = false;
             // 
             // pbLevelSubDiv
             // 
             this.pbLevelSubDiv.Image = ((System.Drawing.Image)(resources.GetObject("pbLevelSubDiv.Image")));
-            this.pbLevelSubDiv.Location = new System.Drawing.Point(44, 195);
-            this.pbLevelSubDiv.Margin = new System.Windows.Forms.Padding(6);
+            this.pbLevelSubDiv.Location = new System.Drawing.Point(36, 162);
+            this.pbLevelSubDiv.Margin = new System.Windows.Forms.Padding(5);
             this.pbLevelSubDiv.Name = "pbLevelSubDiv";
-            this.pbLevelSubDiv.Size = new System.Drawing.Size(29, 30);
+            this.pbLevelSubDiv.Size = new System.Drawing.Size(24, 25);
             this.pbLevelSubDiv.TabIndex = 8;
             this.pbLevelSubDiv.TabStop = false;
             // 
             // pbLevelDiv
             // 
             this.pbLevelDiv.Image = ((System.Drawing.Image)(resources.GetObject("pbLevelDiv.Image")));
-            this.pbLevelDiv.Location = new System.Drawing.Point(44, 160);
-            this.pbLevelDiv.Margin = new System.Windows.Forms.Padding(6);
+            this.pbLevelDiv.Location = new System.Drawing.Point(36, 133);
+            this.pbLevelDiv.Margin = new System.Windows.Forms.Padding(5);
             this.pbLevelDiv.Name = "pbLevelDiv";
-            this.pbLevelDiv.Size = new System.Drawing.Size(29, 30);
+            this.pbLevelDiv.Size = new System.Drawing.Size(24, 25);
             this.pbLevelDiv.TabIndex = 7;
             this.pbLevelDiv.TabStop = false;
             // 
             // pbLevelUser
             // 
             this.pbLevelUser.Image = ((System.Drawing.Image)(resources.GetObject("pbLevelUser.Image")));
-            this.pbLevelUser.Location = new System.Drawing.Point(44, 125);
-            this.pbLevelUser.Margin = new System.Windows.Forms.Padding(6);
+            this.pbLevelUser.Location = new System.Drawing.Point(36, 104);
+            this.pbLevelUser.Margin = new System.Windows.Forms.Padding(5);
             this.pbLevelUser.Name = "pbLevelUser";
-            this.pbLevelUser.Size = new System.Drawing.Size(29, 30);
+            this.pbLevelUser.Size = new System.Drawing.Size(24, 25);
             this.pbLevelUser.TabIndex = 6;
             this.pbLevelUser.TabStop = false;
             // 
             // rdbLevelOrg
             // 
             this.rdbLevelOrg.AutoSize = true;
-            this.rdbLevelOrg.Location = new System.Drawing.Point(7, 234);
-            this.rdbLevelOrg.Margin = new System.Windows.Forms.Padding(6);
+            this.rdbLevelOrg.Location = new System.Drawing.Point(6, 195);
+            this.rdbLevelOrg.Margin = new System.Windows.Forms.Padding(5);
             this.rdbLevelOrg.Name = "rdbLevelOrg";
             this.rdbLevelOrg.Size = new System.Drawing.Size(21, 20);
             this.rdbLevelOrg.TabIndex = 5;
@@ -404,8 +447,8 @@
             // rdbLevelSubDiv
             // 
             this.rdbLevelSubDiv.AutoSize = true;
-            this.rdbLevelSubDiv.Location = new System.Drawing.Point(7, 199);
-            this.rdbLevelSubDiv.Margin = new System.Windows.Forms.Padding(6);
+            this.rdbLevelSubDiv.Location = new System.Drawing.Point(6, 166);
+            this.rdbLevelSubDiv.Margin = new System.Windows.Forms.Padding(5);
             this.rdbLevelSubDiv.Name = "rdbLevelSubDiv";
             this.rdbLevelSubDiv.Size = new System.Drawing.Size(21, 20);
             this.rdbLevelSubDiv.TabIndex = 4;
@@ -414,8 +457,8 @@
             // rdbLevelDiv
             // 
             this.rdbLevelDiv.AutoSize = true;
-            this.rdbLevelDiv.Location = new System.Drawing.Point(7, 163);
-            this.rdbLevelDiv.Margin = new System.Windows.Forms.Padding(6);
+            this.rdbLevelDiv.Location = new System.Drawing.Point(6, 136);
+            this.rdbLevelDiv.Margin = new System.Windows.Forms.Padding(5);
             this.rdbLevelDiv.Name = "rdbLevelDiv";
             this.rdbLevelDiv.Size = new System.Drawing.Size(21, 20);
             this.rdbLevelDiv.TabIndex = 3;
@@ -424,8 +467,8 @@
             // rdbLevelUser
             // 
             this.rdbLevelUser.AutoSize = true;
-            this.rdbLevelUser.Location = new System.Drawing.Point(7, 128);
-            this.rdbLevelUser.Margin = new System.Windows.Forms.Padding(6);
+            this.rdbLevelUser.Location = new System.Drawing.Point(6, 107);
+            this.rdbLevelUser.Margin = new System.Windows.Forms.Padding(5);
             this.rdbLevelUser.Name = "rdbLevelUser";
             this.rdbLevelUser.Size = new System.Drawing.Size(21, 20);
             this.rdbLevelUser.TabIndex = 2;
@@ -434,10 +477,10 @@
             // lblLevelAny
             // 
             this.lblLevelAny.AutoSize = true;
-            this.lblLevelAny.Location = new System.Drawing.Point(42, 93);
-            this.lblLevelAny.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.lblLevelAny.Location = new System.Drawing.Point(34, 77);
+            this.lblLevelAny.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblLevelAny.Name = "lblLevelAny";
-            this.lblLevelAny.Size = new System.Drawing.Size(47, 25);
+            this.lblLevelAny.Size = new System.Drawing.Size(36, 20);
             this.lblLevelAny.TabIndex = 1;
             this.lblLevelAny.Text = "Any";
             // 
@@ -445,8 +488,8 @@
             // 
             this.rdbLevelAny.AutoSize = true;
             this.rdbLevelAny.Checked = true;
-            this.rdbLevelAny.Location = new System.Drawing.Point(7, 93);
-            this.rdbLevelAny.Margin = new System.Windows.Forms.Padding(6);
+            this.rdbLevelAny.Location = new System.Drawing.Point(6, 77);
+            this.rdbLevelAny.Margin = new System.Windows.Forms.Padding(5);
             this.rdbLevelAny.Name = "rdbLevelAny";
             this.rdbLevelAny.Size = new System.Drawing.Size(21, 20);
             this.rdbLevelAny.TabIndex = 0;
@@ -463,30 +506,9 @@
             this.privilegeList.Images.SetKeyName(3, "pbLevelSubDiv.Image.gif");
             this.privilegeList.Images.SetKeyName(4, "pbLevelOrg.Image.gif");
             // 
-            // comboBox1
-            // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "Equals",
-            "Greater than",
-            "Greater or eq.",
-            "Lower than",
-            "Lower or eq."});
-            this.comboBox1.Location = new System.Drawing.Point(0, 3);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(164, 32);
-            this.comboBox1.TabIndex = 12;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
-            // 
-            // columnHeader6
-            // 
-            this.columnHeader6.Text = "Operator";
-            this.columnHeader6.Width = 120;
-            // 
             // MainControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.btnRemove);
@@ -495,9 +517,9 @@
             this.Controls.Add(this.gbSelectedPrivileges);
             this.Controls.Add(this.gbPrivileges);
             this.Controls.Add(this.toolStripMenu);
-            this.Margin = new System.Windows.Forms.Padding(6);
+            this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "MainControl";
-            this.Size = new System.Drawing.Size(1558, 923);
+            this.Size = new System.Drawing.Size(1275, 769);
             this.toolStripMenu.ResumeLayout(false);
             this.toolStripMenu.PerformLayout();
             this.gbPrivileges.ResumeLayout(false);
@@ -531,7 +553,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Button btnRemove;
-        private System.Windows.Forms.ToolStripButton tsbLoadRolesAndPrivs;
         private System.Windows.Forms.Button btnDisplayRoles;
         private System.Windows.Forms.Label lblSearch;
         private System.Windows.Forms.TextBox txtSearch;
@@ -554,5 +575,8 @@
         private System.Windows.Forms.ImageList privilegeList;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.ColumnHeader columnHeader6;
+        private System.Windows.Forms.ToolStripDropDownButton tsddbLoad;
+        private System.Windows.Forms.ToolStripMenuItem tsmiLoadFromSolution;
+        private System.Windows.Forms.ToolStripMenuItem tsmiLoadAll;
     }
 }

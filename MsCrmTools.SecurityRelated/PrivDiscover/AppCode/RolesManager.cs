@@ -16,20 +16,38 @@ namespace MsCrmTools.PrivDiscover.AppCode
 
         public DataCollection<Entity> GetPrivileges()
         {
-            var qe = new QueryExpression("privilege")
-                         {
-                             Criteria = new FilterExpression(),
-                             ColumnSet = new ColumnSet(true)
-                         };
+            EntityCollection ec = null;
 
-            return service.RetrieveMultiple(qe).Entities;
+            var qe = new QueryExpression("privilege")
+            {
+                Criteria = new FilterExpression(),
+                ColumnSet = new ColumnSet("name", "canbebasic", "canbelocal", "canbedeep", "canbeglobal", "accessright"),
+                PageInfo = new PagingInfo
+                {
+                    Count = 500,
+                    PageNumber = 1
+                }
+            };
+
+            EntityCollection records;
+            do
+            {
+                records = service.RetrieveMultiple(qe);
+                if (ec == null) ec = records;
+                else ec.Entities.AddRange(records.Entities);
+                qe.PageInfo.PageNumber++;
+                qe.PageInfo.PagingCookie = records.PagingCookie;
+            }
+            while (records.MoreRecords);
+
+            return ec.Entities;
         }
 
         public List<SecurityRole> GetRoles()
         {
             var list = new List<SecurityRole>();
 
-            var qe = new QueryExpression("role") { Criteria = new FilterExpression(), ColumnSet = new ColumnSet(true) };
+            var qe = new QueryExpression("role") { Criteria = new FilterExpression(), ColumnSet = new ColumnSet("name") };
             qe.Criteria.AddCondition("parentroleid", ConditionOperator.Null);
 
             var roles = service.RetrieveMultiple(qe).Entities;
@@ -37,26 +55,26 @@ namespace MsCrmTools.PrivDiscover.AppCode
             foreach (var role in roles)
             {
                 var sr = new SecurityRole
-                             {
-                                 Id = role.Id,
-                                 Name = role["name"].ToString(),
-                                 Privileges = new List<Privilege>()
-                             };
+                {
+                    Id = role.Id,
+                    Name = role["name"].ToString(),
+                    Privileges = new List<Privilege>()
+                };
 
                 var request = new RetrieveRolePrivilegesRoleRequest
-                                  {
-                                      RoleId = role.Id
-                                  };
+                {
+                    RoleId = role.Id
+                };
 
                 var response = (RetrieveRolePrivilegesRoleResponse)service.Execute(request);
 
                 foreach (var roleprivilege in response.RolePrivileges)
                 {
                     sr.Privileges.Add(new Privilege
-                                          {
-                                              Id = roleprivilege.PrivilegeId,
-                                              Depth = roleprivilege.Depth
-                                          });
+                    {
+                        Id = roleprivilege.PrivilegeId,
+                        Depth = roleprivilege.Depth
+                    });
                 }
 
                 list.Add(sr);

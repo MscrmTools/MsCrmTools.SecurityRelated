@@ -11,7 +11,8 @@
     <iconUrl>https://raw.githubusercontent.com/wiki/MscrmTools/XrmToolBox/Images/logo_0100.png</iconUrl>
     <description>Set of tools for XrmToolBox regarding security management</description>
     <summary>Set of tools for XrmToolBox regarding security management</summary>
-    <releaseNotes>Privileges Discovery : Allow to search privileges by entity display name</releaseNotes>
+    <releaseNotes>Privileges Discovery : Fix missing privileges when more than 5000.
+Privileges Discovery : Allow to retrieve privileges by solution(s) to speed up loading</releaseNotes>
     <tags>XrmToolBox Plugin Security Related</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2016.11.3" />
