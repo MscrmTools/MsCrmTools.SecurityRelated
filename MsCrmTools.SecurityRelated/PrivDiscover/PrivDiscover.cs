@@ -116,7 +116,7 @@ namespace MsCrmTools.PrivDiscover
                 if (rdbLevelAny.Checked)
                 {
                     priv.IsAnyDepth = true;
-                    priv.IsNoDepth = false;
+                    priv.IsNoDepth = true;
                 }
                 else if (rdbLevelNone.Checked)
                 {
@@ -263,8 +263,22 @@ namespace MsCrmTools.PrivDiscover
 
         public string UserName => "MscrmTools";
 
-        private string AddSpacesToSentence(string text, bool preserveAcronyms)
+        private string AddSpacesToSentence(Guid privilegeId, string text, bool preserveAcronyms)
         {
+            var emd = entities.FirstOrDefault(e => e.Privileges.Any(p => p.PrivilegeId.Equals(privilegeId)));
+            if (emd != null)
+            {
+                var name = emd.DisplayName?.UserLocalizedLabel?.Label;
+                if (text.StartsWith("Write")) return $"Write {name}";
+                if (text.StartsWith("Create")) return $"Create {name}";
+                if (text.StartsWith("Read")) return $"Read {name}";
+                if (text.StartsWith("Delete")) return $"Delete {name}";
+                if (text.StartsWith("Assign")) return $"Assign {name}";
+                if (text.StartsWith("Share")) return $"Share {name}";
+                if (text.StartsWith("AppendTo")) return $"Append to {name}";
+                if (text.StartsWith("Append")) return $"Append {name}";
+            }
+
             if (string.IsNullOrWhiteSpace(text))
                 return string.Empty;
             StringBuilder newText = new StringBuilder(text.Length * 2);
@@ -309,7 +323,8 @@ namespace MsCrmTools.PrivDiscover
                         {
                             matchPrivileges = role.Privileges.All(p => p.Id != currentPrivilege.Id);
                         }
-                        else if (currentPrivilege.IsAnyDepth)
+
+                        if (currentPrivilege.IsAnyDepth)
                         {
                             var privilegeFound = role.Privileges.FirstOrDefault(p => p.Id == currentPrivilege.Id);
                             if (privilegeFound != null)
@@ -318,7 +333,8 @@ namespace MsCrmTools.PrivDiscover
                                 foundDepth = privilegeFound.Depth.ToString();
                             }
                         }
-                        else
+
+                        if (!currentPrivilege.IsNoDepth && !currentPrivilege.IsAnyDepth)
                         {
                             matchPrivileges = role.Privileges.Any(p =>
                                 p.Id == currentPrivilege.Id && currentPrivilege.Depth == p.Depth);
@@ -327,14 +343,20 @@ namespace MsCrmTools.PrivDiscover
                     }
                     else if (conditionOperator == "Greater than")
                     {
+                        Privilege privFound;
                         if (currentPrivilege.IsNoDepth)
                         {
-                            matchPrivileges = role.Privileges.Any(p =>
-                                p.Id == currentPrivilege.Id);
+                            matchPrivileges = role.Privileges.Any(p => p.Id == currentPrivilege.Id);
+                            privFound = role.Privileges.FirstOrDefault(p =>
+                                      p.Id == currentPrivilege.Id && (
+                                          p.Depth == PrivilegeDepth.Local
+                                          || p.Depth == PrivilegeDepth.Deep
+                                          || p.Depth == PrivilegeDepth.Global
+                                      ));
+                            foundDepth = privFound?.Depth.ToString();
                         }
                         else
                         {
-                            Privilege privFound;
                             switch (currentPrivilege.Depth)
                             {
                                 case PrivilegeDepth.Basic:
@@ -373,54 +395,63 @@ namespace MsCrmTools.PrivDiscover
                     }
                     else if (conditionOperator == "Greater or eq.")
                     {
+                        Privilege privFound;
                         if (currentPrivilege.IsNoDepth)
                         {
-                            matchPrivileges = role.Privileges.All(p =>
-                                p.Id != currentPrivilege.Id);
-                        }
-
-                        Privilege privFound;
-                        switch (currentPrivilege.Depth)
-                        {
-                            case PrivilegeDepth.Basic:
-                                privFound = role.Privileges.FirstOrDefault(p =>
+                            matchPrivileges = true;
+                            privFound = role.Privileges.FirstOrDefault(p =>
                                     p.Id == currentPrivilege.Id && (
                                         p.Depth == PrivilegeDepth.Basic
                                         || p.Depth == PrivilegeDepth.Local
                                         || p.Depth == PrivilegeDepth.Deep
                                         || p.Depth == PrivilegeDepth.Global
                                     ));
-                                matchPrivileges = privFound != null;
-                                foundDepth = privFound?.Depth.ToString();
-                                break;
+                            foundDepth = privFound?.Depth.ToString();
+                        }
+                        else
+                        {
+                            switch (currentPrivilege.Depth)
+                            {
+                                case PrivilegeDepth.Basic:
+                                    privFound = role.Privileges.FirstOrDefault(p =>
+                                        p.Id == currentPrivilege.Id && (
+                                            p.Depth == PrivilegeDepth.Basic
+                                            || p.Depth == PrivilegeDepth.Local
+                                            || p.Depth == PrivilegeDepth.Deep
+                                            || p.Depth == PrivilegeDepth.Global
+                                        ));
+                                    matchPrivileges = privFound != null;
+                                    foundDepth = privFound?.Depth.ToString();
+                                    break;
 
-                            case PrivilegeDepth.Local:
-                                privFound = role.Privileges.FirstOrDefault(p =>
-                                    p.Id == currentPrivilege.Id && (
-                                        p.Depth == PrivilegeDepth.Local
-                                        || p.Depth == PrivilegeDepth.Deep
-                                        || p.Depth == PrivilegeDepth.Global
-                                    ));
-                                matchPrivileges = privFound != null;
-                                foundDepth = privFound?.Depth.ToString();
-                                break;
+                                case PrivilegeDepth.Local:
+                                    privFound = role.Privileges.FirstOrDefault(p =>
+                                        p.Id == currentPrivilege.Id && (
+                                            p.Depth == PrivilegeDepth.Local
+                                            || p.Depth == PrivilegeDepth.Deep
+                                            || p.Depth == PrivilegeDepth.Global
+                                        ));
+                                    matchPrivileges = privFound != null;
+                                    foundDepth = privFound?.Depth.ToString();
+                                    break;
 
-                            case PrivilegeDepth.Deep:
-                                privFound = role.Privileges.FirstOrDefault(p =>
-                                    p.Id == currentPrivilege.Id && (
-                                        p.Depth == PrivilegeDepth.Deep
-                                        || p.Depth == PrivilegeDepth.Global
-                                    ));
-                                matchPrivileges = privFound != null;
-                                foundDepth = privFound?.Depth.ToString();
-                                break;
+                                case PrivilegeDepth.Deep:
+                                    privFound = role.Privileges.FirstOrDefault(p =>
+                                        p.Id == currentPrivilege.Id && (
+                                            p.Depth == PrivilegeDepth.Deep
+                                            || p.Depth == PrivilegeDepth.Global
+                                        ));
+                                    matchPrivileges = privFound != null;
+                                    foundDepth = privFound?.Depth.ToString();
+                                    break;
 
-                            case PrivilegeDepth.Global:
-                                privFound = role.Privileges.FirstOrDefault(p =>
-                                    p.Id == currentPrivilege.Id && p.Depth == PrivilegeDepth.Global);
-                                matchPrivileges = privFound != null;
-                                foundDepth = privFound?.Depth.ToString();
-                                break;
+                                case PrivilegeDepth.Global:
+                                    privFound = role.Privileges.FirstOrDefault(p =>
+                                        p.Id == currentPrivilege.Id && p.Depth == PrivilegeDepth.Global);
+                                    matchPrivileges = privFound != null;
+                                    foundDepth = privFound?.Depth.ToString();
+                                    break;
+                            }
                         }
                     }
                     else if (conditionOperator == "Lower than")
@@ -553,22 +584,16 @@ namespace MsCrmTools.PrivDiscover
                                     break;
 
                                 case PrivilegeDepth.Global:
-                                    matchPrivileges = role.Privileges.All(p =>
-                                        p.Id != currentPrivilege.Id);
-                                    foundDepth = "";
+                                    matchPrivileges = true;
 
-                                    if (!matchPrivileges)
-                                    {
-                                        privFound = role.Privileges.FirstOrDefault(p =>
-                                            p.Id == currentPrivilege.Id && (
-                                                p.Depth == PrivilegeDepth.Basic
-                                                || p.Depth == PrivilegeDepth.Local
-                                                || p.Depth == PrivilegeDepth.Deep
-                                                || p.Depth == PrivilegeDepth.Global
-                                            ));
-                                        matchPrivileges = privFound != null;
-                                        foundDepth = privFound?.Depth.ToString();
-                                    }
+                                    privFound = role.Privileges.FirstOrDefault(p =>
+                                        p.Id == currentPrivilege.Id && (
+                                            p.Depth == PrivilegeDepth.Basic
+                                            || p.Depth == PrivilegeDepth.Local
+                                            || p.Depth == PrivilegeDepth.Deep
+                                            || p.Depth == PrivilegeDepth.Global
+                                        ));
+                                    foundDepth = privFound?.Depth.ToString();
 
                                     break;
                             }
@@ -577,7 +602,12 @@ namespace MsCrmTools.PrivDiscover
 
                     if (!matchPrivileges)
                     {
-                        break;
+                        if (rdbLevelAny.Checked)
+                        {
+                            foundDepth = "";
+                            matchPrivileges = true;
+                        }
+                        else break;
                     }
 
                     privDepths.Add(currentPrivilege.Name, foundDepth);
@@ -585,20 +615,20 @@ namespace MsCrmTools.PrivDiscover
 
                 if (matchPrivileges)
                 {
-                    var item = new ListViewItem(role.Name) { Tag = role.Id, ImageIndex = 0 };
+                    var item2 = new ListViewItem(role.Name) { Tag = role.Id, ImageIndex = 0 };
                     foreach (var pair in privDepths)
                     {
-                        item.SubItems.Add(pair.Value);
+                        item2.SubItems.Add(pair.Value);
                     }
 
-                    lviList.Add(item);
+                    lviList.Add(item2);
                 }
             }
 
             foreach (ListViewItem item in lvSelectedPrivileges.Items)
             {
                 var currentPrivilege = (Privilege)item.Tag;
-                lvRoles.Columns.Add(new ColumnHeader { Name = currentPrivilege.Name, Text = AddSpacesToSentence(currentPrivilege.Name.Replace("prv", ""), true), TextAlign = HorizontalAlignment.Center, Width = 120 });
+                lvRoles.Columns.Add(new ColumnHeader { Name = currentPrivilege.Name, Text = AddSpacesToSentence(currentPrivilege.Id, currentPrivilege.Name.Replace("prv", ""), true), TextAlign = HorizontalAlignment.Center, Width = 120 });
             }
 
             lvRoles.Items.AddRange(lviList.ToArray());
