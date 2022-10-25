@@ -3,6 +3,7 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using McTools.Xrm.Connection;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -10,7 +11,6 @@ using MsCrmTools.PrivDiscover.AppCode;
 using MsCrmTools.SecurityRelated.Forms;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -646,7 +646,7 @@ namespace MsCrmTools.PrivDiscover
             if (lvRoles.SelectedItems.Count == 0)
                 return;
 
-            Process.Start(string.Format("{0}/biz/roles/edit.aspx?id={1}", ConnectionDetail.OriginalUrl, (Guid)lvRoles.SelectedItems[0].Tag));
+            ConnectionDetail.OpenUrlWithBrowserProfile(new Uri(string.Format("{0}/biz/roles/edit.aspx?id={1}", ConnectionDetail.OriginalUrl, (Guid)lvRoles.SelectedItems[0].Tag)));
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
