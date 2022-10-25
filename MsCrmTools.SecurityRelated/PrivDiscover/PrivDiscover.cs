@@ -26,8 +26,9 @@ namespace MsCrmTools.PrivDiscover
         #region Variables
 
         private List<EntityMetadata> entities;
-
         private Thread fillPrivThread;
+        private List<ListViewGroup> lvgList = new List<ListViewGroup>();
+        private List<ListViewItem> lviList = new List<ListViewItem>();
 
         /// <summary>
         /// List of privileges for the current organization
@@ -205,6 +206,8 @@ namespace MsCrmTools.PrivDiscover
             lvPrivileges.Items.Clear();
             lvSelectedPrivileges.Items.Clear();
             lvRoles.Items.Clear();
+            lviList.Clear();
+            lvgList.Clear();
 
             List<Entity> solutions = new List<Entity>();
 
@@ -236,6 +239,10 @@ namespace MsCrmTools.PrivDiscover
 
                     var mdManager = new MetadataManager(Service);
                     entities = mdManager.GetEntitiesWithPrivileges(solutions);
+
+                    bw.ReportProgress(0, "Preparing UI list items...");
+
+                    ComputeListItems();
                 },
                 PostWorkCallBack = e =>
                 {
@@ -674,27 +681,9 @@ namespace MsCrmTools.PrivDiscover
             }
         }
 
-        private void DoWork()
+        private void ComputeListItems()
         {
-            var filterTerm = txtSearch.Text;
-            IEnumerable<Entity> matchingPrivileges;
-
-            if (filterTerm.Length != 0)
-            {
-                matchingPrivileges =
-                    privileges.Where(
-                        x => x["name"].ToString().ToLower().IndexOf(filterTerm.ToLower(), StringComparison.Ordinal) >= 0
-                        || entities.Any(e => e.DisplayName?.UserLocalizedLabel?.Label.ToLower().IndexOf(filterTerm.ToLower()) >= 0 && e.Privileges.Any(p => p.PrivilegeId == x.Id)));
-            }
-            else
-            {
-                matchingPrivileges = privileges;
-            }
-
-            var lviList = new List<ListViewItem>();
-            var lvgList = new List<ListViewGroup>();
-
-            foreach (var privilege in matchingPrivileges)
+            foreach (var privilege in privileges)
             {
                 string entitySchemaName = null;
                 var groupName = string.Empty;
@@ -765,6 +754,8 @@ namespace MsCrmTools.PrivDiscover
                     lvgList.Add(new ListViewGroup(groupName, groupName));
                 }
 
+                privilege["groupname"] = groupName;
+
                 var item = new ListViewItem
                 {
                     Text = privilege["name"].ToString().Remove(0, 3),
@@ -783,7 +774,39 @@ namespace MsCrmTools.PrivDiscover
             }
 
             ListViewDelegates.AddGroupsRange(lvPrivileges, lvgList.ToArray());
-            ListViewDelegates.AddItemsRange(lvPrivileges, lviList.ToArray());
+        }
+
+        private void DoWork()
+        {
+            Thread.Sleep(400);
+
+            var filterTerm = txtSearch.Text;
+            IEnumerable<Entity> matchingPrivileges;
+
+            if (filterTerm.Length != 0)
+            {
+                matchingPrivileges =
+                    privileges.Where(
+                        x => x["name"].ToString().ToLower().IndexOf(filterTerm.ToLower(), StringComparison.Ordinal) >= 0
+                        || entities.Any(e => e.DisplayName?.UserLocalizedLabel?.Label.ToLower().IndexOf(filterTerm.ToLower()) >= 0 && e.Privileges.Any(p => p.PrivilegeId == x.Id))).ToList();
+            }
+            else
+            {
+                matchingPrivileges = privileges.ToList();
+            }
+
+            var items = lviList.Where(i => matchingPrivileges.FirstOrDefault(mp => mp.Id.Equals(((Entity)i.Tag).Id)) != null).ToList();
+
+            foreach (var item in items)
+            {
+                var grpName = ((Entity)item.Tag).GetAttributeValue<string>("groupname");
+                item.Group = grpName != null
+                            ? lvgList.First(f => f.Name == grpName)
+                            : lvgList.First(f => f.Name == "_Common");
+            }
+
+            //ListViewDelegates.AddGroupsRange(lvPrivileges, lvgList.ToArray());
+            ListViewDelegates.AddItemsRange(lvPrivileges, items.ToArray());
 
             ListViewDelegates.SortGroup(lvPrivileges, true);
             ListViewDelegates.Sort(lvPrivileges, true);
@@ -909,7 +932,7 @@ namespace MsCrmTools.PrivDiscover
             fillPrivThread?.Abort();
 
             lvPrivileges.Items.Clear();
-            lvPrivileges.Groups.Clear();
+            //lvPrivileges.Groups.Clear();
 
             btnAdd.Enabled = false;
             btnRemove.Enabled = false;

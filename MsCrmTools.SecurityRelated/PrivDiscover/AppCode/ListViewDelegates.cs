@@ -50,7 +50,11 @@ namespace MsCrmTools.PrivDiscover.AppCode
 
         public static void AddGroupsRange(ListView listview, ListViewGroup[] groups)
         {
-            MethodInvoker miAddItem = () => listview.Groups.AddRange(groups);
+            MethodInvoker miAddItem = () =>
+            {
+                if (listview.Groups.Count == 0)
+                    listview.Groups.AddRange(groups);
+            };
 
             if (listview.InvokeRequired)
             {
@@ -103,7 +107,10 @@ namespace MsCrmTools.PrivDiscover.AppCode
 
         public static void AddItemsRange(ListView listview, ListViewItem[] items)
         {
-            MethodInvoker miAddItem = () => listview.Items.AddRange(items);
+            MethodInvoker miAddItem = () =>
+            {
+                listview.Items.AddRange(items);
+            };
 
             if (listview.InvokeRequired)
             {
