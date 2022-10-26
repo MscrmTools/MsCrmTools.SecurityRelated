@@ -54,30 +54,39 @@
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnRemove = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pnlPrivDepth = new System.Windows.Forms.Panel();
             this.rdbLevelNone = new System.Windows.Forms.RadioButton();
-            this.pbLevelOrg = new System.Windows.Forms.PictureBox();
-            this.pbLevelSubDiv = new System.Windows.Forms.PictureBox();
-            this.pbLevelDiv = new System.Windows.Forms.PictureBox();
-            this.pbLevelUser = new System.Windows.Forms.PictureBox();
-            this.rdbLevelOrg = new System.Windows.Forms.RadioButton();
-            this.rdbLevelSubDiv = new System.Windows.Forms.RadioButton();
-            this.rdbLevelDiv = new System.Windows.Forms.RadioButton();
-            this.rdbLevelUser = new System.Windows.Forms.RadioButton();
-            this.lblLevelAny = new System.Windows.Forms.Label();
             this.rdbLevelAny = new System.Windows.Forms.RadioButton();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.lblLevelAny = new System.Windows.Forms.Label();
+            this.rdbLevelUser = new System.Windows.Forms.RadioButton();
+            this.pbLevelOrg = new System.Windows.Forms.PictureBox();
+            this.rdbLevelDiv = new System.Windows.Forms.RadioButton();
+            this.pbLevelSubDiv = new System.Windows.Forms.PictureBox();
+            this.rdbLevelSubDiv = new System.Windows.Forms.RadioButton();
+            this.pbLevelDiv = new System.Windows.Forms.PictureBox();
+            this.rdbLevelOrg = new System.Windows.Forms.RadioButton();
+            this.pbLevelUser = new System.Windows.Forms.PictureBox();
+            this.pnlSeparator = new System.Windows.Forms.Panel();
+            this.pnlPrivOperators = new System.Windows.Forms.Panel();
+            this.rdbPrivOperatorLessThan = new System.Windows.Forms.RadioButton();
+            this.rdbPrivOperatorLessOrEquals = new System.Windows.Forms.RadioButton();
+            this.rdbPrivOperatorEquals = new System.Windows.Forms.RadioButton();
+            this.rdbPrivOperatorGreaterOrEquals = new System.Windows.Forms.RadioButton();
+            this.rdbPrivOperatorCreaterThan = new System.Windows.Forms.RadioButton();
             this.privilegeList = new System.Windows.Forms.ImageList(this.components);
             this.toolStripMenu.SuspendLayout();
             this.gbPrivileges.SuspendLayout();
             this.gbSelectedPrivileges.SuspendLayout();
             this.gbResultingRoles.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.pnlPrivDepth.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbLevelOrg)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbLevelSubDiv)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbLevelDiv)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbLevelUser)).BeginInit();
+            this.pnlPrivOperators.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStripMenu
@@ -86,7 +95,7 @@
             this.tsddbLoad});
             this.toolStripMenu.Location = new System.Drawing.Point(0, 0);
             this.toolStripMenu.Name = "toolStripMenu";
-            this.toolStripMenu.Size = new System.Drawing.Size(1530, 46);
+            this.toolStripMenu.Size = new System.Drawing.Size(1275, 34);
             this.toolStripMenu.TabIndex = 2;
             this.toolStripMenu.Text = "toolStrip1";
             // 
@@ -98,7 +107,7 @@
             this.tsddbLoad.Image = global::MsCrmTools.SecurityRelated.Properties.Resources.Dataverse_16x16;
             this.tsddbLoad.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddbLoad.Name = "tsddbLoad";
-            this.tsddbLoad.Size = new System.Drawing.Size(93, 29);
+            this.tsddbLoad.Size = new System.Drawing.Size(85, 29);
             this.tsddbLoad.Text = "Load";
             this.tsddbLoad.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsddbLoad_DropDownItemClicked);
             // 
@@ -315,7 +324,7 @@
             // btnAdd
             // 
             this.btnAdd.Enabled = false;
-            this.btnAdd.Location = new System.Drawing.Point(435, 366);
+            this.btnAdd.Location = new System.Drawing.Point(435, 505);
             this.btnAdd.Margin = new System.Windows.Forms.Padding(5);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(137, 35);
@@ -338,163 +347,242 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.comboBox1);
-            this.panel1.Controls.Add(this.pictureBox1);
-            this.panel1.Controls.Add(this.rdbLevelNone);
-            this.panel1.Controls.Add(this.pbLevelOrg);
-            this.panel1.Controls.Add(this.pbLevelSubDiv);
-            this.panel1.Controls.Add(this.pbLevelDiv);
-            this.panel1.Controls.Add(this.pbLevelUser);
-            this.panel1.Controls.Add(this.rdbLevelOrg);
-            this.panel1.Controls.Add(this.rdbLevelSubDiv);
-            this.panel1.Controls.Add(this.rdbLevelDiv);
-            this.panel1.Controls.Add(this.rdbLevelUser);
-            this.panel1.Controls.Add(this.lblLevelAny);
-            this.panel1.Controls.Add(this.rdbLevelAny);
-            this.panel1.Location = new System.Drawing.Point(435, 117);
+            this.panel1.Controls.Add(this.pnlPrivDepth);
+            this.panel1.Controls.Add(this.pnlSeparator);
+            this.panel1.Controls.Add(this.pnlPrivOperators);
+            this.panel1.Location = new System.Drawing.Point(424, 117);
             this.panel1.Margin = new System.Windows.Forms.Padding(5);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(137, 238);
+            this.panel1.Size = new System.Drawing.Size(157, 378);
             this.panel1.TabIndex = 8;
             // 
-            // comboBox1
+            // pnlPrivDepth
             // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "Equals",
-            "Greater than",
-            "Greater or eq.",
-            "Lower than",
-            "Lower or eq."});
-            this.comboBox1.Location = new System.Drawing.Point(0, 2);
-            this.comboBox1.Margin = new System.Windows.Forms.Padding(2);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(135, 28);
-            this.comboBox1.TabIndex = 12;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(36, 46);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(5);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(24, 25);
-            this.pictureBox1.TabIndex = 11;
-            this.pictureBox1.TabStop = false;
+            this.pnlPrivDepth.Controls.Add(this.rdbLevelNone);
+            this.pnlPrivDepth.Controls.Add(this.rdbLevelAny);
+            this.pnlPrivDepth.Controls.Add(this.pictureBox1);
+            this.pnlPrivDepth.Controls.Add(this.lblLevelAny);
+            this.pnlPrivDepth.Controls.Add(this.rdbLevelUser);
+            this.pnlPrivDepth.Controls.Add(this.pbLevelOrg);
+            this.pnlPrivDepth.Controls.Add(this.rdbLevelDiv);
+            this.pnlPrivDepth.Controls.Add(this.pbLevelSubDiv);
+            this.pnlPrivDepth.Controls.Add(this.rdbLevelSubDiv);
+            this.pnlPrivDepth.Controls.Add(this.pbLevelDiv);
+            this.pnlPrivDepth.Controls.Add(this.rdbLevelOrg);
+            this.pnlPrivDepth.Controls.Add(this.pbLevelUser);
+            this.pnlPrivDepth.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlPrivDepth.Location = new System.Drawing.Point(0, 206);
+            this.pnlPrivDepth.Name = "pnlPrivDepth";
+            this.pnlPrivDepth.Size = new System.Drawing.Size(157, 285);
+            this.pnlPrivDepth.TabIndex = 13;
             // 
             // rdbLevelNone
             // 
             this.rdbLevelNone.AutoSize = true;
-            this.rdbLevelNone.Location = new System.Drawing.Point(6, 48);
+            this.rdbLevelNone.Location = new System.Drawing.Point(5, 5);
             this.rdbLevelNone.Margin = new System.Windows.Forms.Padding(5);
             this.rdbLevelNone.Name = "rdbLevelNone";
             this.rdbLevelNone.Size = new System.Drawing.Size(21, 20);
             this.rdbLevelNone.TabIndex = 10;
             this.rdbLevelNone.UseVisualStyleBackColor = true;
             // 
-            // pbLevelOrg
-            // 
-            this.pbLevelOrg.Image = ((System.Drawing.Image)(resources.GetObject("pbLevelOrg.Image")));
-            this.pbLevelOrg.Location = new System.Drawing.Point(36, 192);
-            this.pbLevelOrg.Margin = new System.Windows.Forms.Padding(5);
-            this.pbLevelOrg.Name = "pbLevelOrg";
-            this.pbLevelOrg.Size = new System.Drawing.Size(24, 25);
-            this.pbLevelOrg.TabIndex = 9;
-            this.pbLevelOrg.TabStop = false;
-            // 
-            // pbLevelSubDiv
-            // 
-            this.pbLevelSubDiv.Image = ((System.Drawing.Image)(resources.GetObject("pbLevelSubDiv.Image")));
-            this.pbLevelSubDiv.Location = new System.Drawing.Point(36, 162);
-            this.pbLevelSubDiv.Margin = new System.Windows.Forms.Padding(5);
-            this.pbLevelSubDiv.Name = "pbLevelSubDiv";
-            this.pbLevelSubDiv.Size = new System.Drawing.Size(24, 25);
-            this.pbLevelSubDiv.TabIndex = 8;
-            this.pbLevelSubDiv.TabStop = false;
-            // 
-            // pbLevelDiv
-            // 
-            this.pbLevelDiv.Image = ((System.Drawing.Image)(resources.GetObject("pbLevelDiv.Image")));
-            this.pbLevelDiv.Location = new System.Drawing.Point(36, 133);
-            this.pbLevelDiv.Margin = new System.Windows.Forms.Padding(5);
-            this.pbLevelDiv.Name = "pbLevelDiv";
-            this.pbLevelDiv.Size = new System.Drawing.Size(24, 25);
-            this.pbLevelDiv.TabIndex = 7;
-            this.pbLevelDiv.TabStop = false;
-            // 
-            // pbLevelUser
-            // 
-            this.pbLevelUser.Image = ((System.Drawing.Image)(resources.GetObject("pbLevelUser.Image")));
-            this.pbLevelUser.Location = new System.Drawing.Point(36, 104);
-            this.pbLevelUser.Margin = new System.Windows.Forms.Padding(5);
-            this.pbLevelUser.Name = "pbLevelUser";
-            this.pbLevelUser.Size = new System.Drawing.Size(24, 25);
-            this.pbLevelUser.TabIndex = 6;
-            this.pbLevelUser.TabStop = false;
-            // 
-            // rdbLevelOrg
-            // 
-            this.rdbLevelOrg.AutoSize = true;
-            this.rdbLevelOrg.Location = new System.Drawing.Point(6, 195);
-            this.rdbLevelOrg.Margin = new System.Windows.Forms.Padding(5);
-            this.rdbLevelOrg.Name = "rdbLevelOrg";
-            this.rdbLevelOrg.Size = new System.Drawing.Size(21, 20);
-            this.rdbLevelOrg.TabIndex = 5;
-            this.rdbLevelOrg.UseVisualStyleBackColor = true;
-            // 
-            // rdbLevelSubDiv
-            // 
-            this.rdbLevelSubDiv.AutoSize = true;
-            this.rdbLevelSubDiv.Location = new System.Drawing.Point(6, 166);
-            this.rdbLevelSubDiv.Margin = new System.Windows.Forms.Padding(5);
-            this.rdbLevelSubDiv.Name = "rdbLevelSubDiv";
-            this.rdbLevelSubDiv.Size = new System.Drawing.Size(21, 20);
-            this.rdbLevelSubDiv.TabIndex = 4;
-            this.rdbLevelSubDiv.UseVisualStyleBackColor = true;
-            // 
-            // rdbLevelDiv
-            // 
-            this.rdbLevelDiv.AutoSize = true;
-            this.rdbLevelDiv.Location = new System.Drawing.Point(6, 136);
-            this.rdbLevelDiv.Margin = new System.Windows.Forms.Padding(5);
-            this.rdbLevelDiv.Name = "rdbLevelDiv";
-            this.rdbLevelDiv.Size = new System.Drawing.Size(21, 20);
-            this.rdbLevelDiv.TabIndex = 3;
-            this.rdbLevelDiv.UseVisualStyleBackColor = true;
-            // 
-            // rdbLevelUser
-            // 
-            this.rdbLevelUser.AutoSize = true;
-            this.rdbLevelUser.Location = new System.Drawing.Point(6, 107);
-            this.rdbLevelUser.Margin = new System.Windows.Forms.Padding(5);
-            this.rdbLevelUser.Name = "rdbLevelUser";
-            this.rdbLevelUser.Size = new System.Drawing.Size(21, 20);
-            this.rdbLevelUser.TabIndex = 2;
-            this.rdbLevelUser.UseVisualStyleBackColor = true;
-            // 
-            // lblLevelAny
-            // 
-            this.lblLevelAny.AutoSize = true;
-            this.lblLevelAny.Location = new System.Drawing.Point(34, 77);
-            this.lblLevelAny.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.lblLevelAny.Name = "lblLevelAny";
-            this.lblLevelAny.Size = new System.Drawing.Size(36, 20);
-            this.lblLevelAny.TabIndex = 1;
-            this.lblLevelAny.Text = "Any";
-            // 
             // rdbLevelAny
             // 
             this.rdbLevelAny.AutoSize = true;
             this.rdbLevelAny.Checked = true;
-            this.rdbLevelAny.Location = new System.Drawing.Point(6, 77);
+            this.rdbLevelAny.Location = new System.Drawing.Point(5, 34);
             this.rdbLevelAny.Margin = new System.Windows.Forms.Padding(5);
             this.rdbLevelAny.Name = "rdbLevelAny";
             this.rdbLevelAny.Size = new System.Drawing.Size(21, 20);
             this.rdbLevelAny.TabIndex = 0;
             this.rdbLevelAny.TabStop = true;
             this.rdbLevelAny.UseVisualStyleBackColor = true;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(35, 3);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(5);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(24, 25);
+            this.pictureBox1.TabIndex = 11;
+            this.pictureBox1.TabStop = false;
+            // 
+            // lblLevelAny
+            // 
+            this.lblLevelAny.AutoSize = true;
+            this.lblLevelAny.Location = new System.Drawing.Point(33, 34);
+            this.lblLevelAny.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lblLevelAny.Name = "lblLevelAny";
+            this.lblLevelAny.Size = new System.Drawing.Size(36, 20);
+            this.lblLevelAny.TabIndex = 1;
+            this.lblLevelAny.Text = "Any";
+            // 
+            // rdbLevelUser
+            // 
+            this.rdbLevelUser.AutoSize = true;
+            this.rdbLevelUser.Location = new System.Drawing.Point(5, 64);
+            this.rdbLevelUser.Margin = new System.Windows.Forms.Padding(5);
+            this.rdbLevelUser.Name = "rdbLevelUser";
+            this.rdbLevelUser.Size = new System.Drawing.Size(21, 20);
+            this.rdbLevelUser.TabIndex = 2;
+            this.rdbLevelUser.UseVisualStyleBackColor = true;
+            // 
+            // pbLevelOrg
+            // 
+            this.pbLevelOrg.Image = ((System.Drawing.Image)(resources.GetObject("pbLevelOrg.Image")));
+            this.pbLevelOrg.Location = new System.Drawing.Point(35, 149);
+            this.pbLevelOrg.Margin = new System.Windows.Forms.Padding(5);
+            this.pbLevelOrg.Name = "pbLevelOrg";
+            this.pbLevelOrg.Size = new System.Drawing.Size(24, 25);
+            this.pbLevelOrg.TabIndex = 9;
+            this.pbLevelOrg.TabStop = false;
+            // 
+            // rdbLevelDiv
+            // 
+            this.rdbLevelDiv.AutoSize = true;
+            this.rdbLevelDiv.Location = new System.Drawing.Point(5, 93);
+            this.rdbLevelDiv.Margin = new System.Windows.Forms.Padding(5);
+            this.rdbLevelDiv.Name = "rdbLevelDiv";
+            this.rdbLevelDiv.Size = new System.Drawing.Size(21, 20);
+            this.rdbLevelDiv.TabIndex = 3;
+            this.rdbLevelDiv.UseVisualStyleBackColor = true;
+            // 
+            // pbLevelSubDiv
+            // 
+            this.pbLevelSubDiv.Image = ((System.Drawing.Image)(resources.GetObject("pbLevelSubDiv.Image")));
+            this.pbLevelSubDiv.Location = new System.Drawing.Point(35, 119);
+            this.pbLevelSubDiv.Margin = new System.Windows.Forms.Padding(5);
+            this.pbLevelSubDiv.Name = "pbLevelSubDiv";
+            this.pbLevelSubDiv.Size = new System.Drawing.Size(24, 25);
+            this.pbLevelSubDiv.TabIndex = 8;
+            this.pbLevelSubDiv.TabStop = false;
+            // 
+            // rdbLevelSubDiv
+            // 
+            this.rdbLevelSubDiv.AutoSize = true;
+            this.rdbLevelSubDiv.Location = new System.Drawing.Point(5, 123);
+            this.rdbLevelSubDiv.Margin = new System.Windows.Forms.Padding(5);
+            this.rdbLevelSubDiv.Name = "rdbLevelSubDiv";
+            this.rdbLevelSubDiv.Size = new System.Drawing.Size(21, 20);
+            this.rdbLevelSubDiv.TabIndex = 4;
+            this.rdbLevelSubDiv.UseVisualStyleBackColor = true;
+            // 
+            // pbLevelDiv
+            // 
+            this.pbLevelDiv.Image = ((System.Drawing.Image)(resources.GetObject("pbLevelDiv.Image")));
+            this.pbLevelDiv.Location = new System.Drawing.Point(35, 90);
+            this.pbLevelDiv.Margin = new System.Windows.Forms.Padding(5);
+            this.pbLevelDiv.Name = "pbLevelDiv";
+            this.pbLevelDiv.Size = new System.Drawing.Size(24, 25);
+            this.pbLevelDiv.TabIndex = 7;
+            this.pbLevelDiv.TabStop = false;
+            // 
+            // rdbLevelOrg
+            // 
+            this.rdbLevelOrg.AutoSize = true;
+            this.rdbLevelOrg.Location = new System.Drawing.Point(5, 152);
+            this.rdbLevelOrg.Margin = new System.Windows.Forms.Padding(5);
+            this.rdbLevelOrg.Name = "rdbLevelOrg";
+            this.rdbLevelOrg.Size = new System.Drawing.Size(21, 20);
+            this.rdbLevelOrg.TabIndex = 5;
+            this.rdbLevelOrg.UseVisualStyleBackColor = true;
+            // 
+            // pbLevelUser
+            // 
+            this.pbLevelUser.Image = ((System.Drawing.Image)(resources.GetObject("pbLevelUser.Image")));
+            this.pbLevelUser.Location = new System.Drawing.Point(35, 61);
+            this.pbLevelUser.Margin = new System.Windows.Forms.Padding(5);
+            this.pbLevelUser.Name = "pbLevelUser";
+            this.pbLevelUser.Size = new System.Drawing.Size(24, 25);
+            this.pbLevelUser.TabIndex = 6;
+            this.pbLevelUser.TabStop = false;
+            // 
+            // pnlSeparator
+            // 
+            this.pnlSeparator.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlSeparator.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlSeparator.Location = new System.Drawing.Point(0, 132);
+            this.pnlSeparator.Name = "pnlSeparator";
+            this.pnlSeparator.Size = new System.Drawing.Size(236, 5);
+            this.pnlSeparator.TabIndex = 9;
+            // 
+            // pnlPrivOperators
+            // 
+            this.pnlPrivOperators.Controls.Add(this.rdbPrivOperatorLessThan);
+            this.pnlPrivOperators.Controls.Add(this.rdbPrivOperatorLessOrEquals);
+            this.pnlPrivOperators.Controls.Add(this.rdbPrivOperatorEquals);
+            this.pnlPrivOperators.Controls.Add(this.rdbPrivOperatorGreaterOrEquals);
+            this.pnlPrivOperators.Controls.Add(this.rdbPrivOperatorCreaterThan);
+            this.pnlPrivOperators.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlPrivOperators.Location = new System.Drawing.Point(0, 0);
+            this.pnlPrivOperators.Name = "pnlPrivOperators";
+            this.pnlPrivOperators.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.pnlPrivOperators.Size = new System.Drawing.Size(157, 132);
+            this.pnlPrivOperators.TabIndex = 14;
+            // 
+            // rdbPrivOperatorLessThan
+            // 
+            this.rdbPrivOperatorLessThan.AutoSize = true;
+            this.rdbPrivOperatorLessThan.Dock = System.Windows.Forms.DockStyle.Top;
+            this.rdbPrivOperatorLessThan.Location = new System.Drawing.Point(6, 216);
+            this.rdbPrivOperatorLessThan.Name = "rdbPrivOperatorLessThan";
+            this.rdbPrivOperatorLessThan.Size = new System.Drawing.Size(230, 36);
+            this.rdbPrivOperatorLessThan.TabIndex = 4;
+            this.rdbPrivOperatorLessThan.Text = "Less than";
+            this.rdbPrivOperatorLessThan.UseVisualStyleBackColor = true;
+            this.rdbPrivOperatorLessThan.Click += new System.EventHandler(this.rdbPrivOperatorLessThan_Click);
+            // 
+            // rdbPrivOperatorLessOrEquals
+            // 
+            this.rdbPrivOperatorLessOrEquals.AutoSize = true;
+            this.rdbPrivOperatorLessOrEquals.Dock = System.Windows.Forms.DockStyle.Top;
+            this.rdbPrivOperatorLessOrEquals.Location = new System.Drawing.Point(6, 162);
+            this.rdbPrivOperatorLessOrEquals.Name = "rdbPrivOperatorLessOrEquals";
+            this.rdbPrivOperatorLessOrEquals.Size = new System.Drawing.Size(230, 36);
+            this.rdbPrivOperatorLessOrEquals.TabIndex = 3;
+            this.rdbPrivOperatorLessOrEquals.Text = "Less or eq.";
+            this.rdbPrivOperatorLessOrEquals.UseVisualStyleBackColor = true;
+            this.rdbPrivOperatorLessOrEquals.Click += new System.EventHandler(this.rdbPrivOperatorLessThan_Click);
+            // 
+            // rdbPrivOperatorEquals
+            // 
+            this.rdbPrivOperatorEquals.AutoSize = true;
+            this.rdbPrivOperatorEquals.Checked = true;
+            this.rdbPrivOperatorEquals.Dock = System.Windows.Forms.DockStyle.Top;
+            this.rdbPrivOperatorEquals.Location = new System.Drawing.Point(6, 108);
+            this.rdbPrivOperatorEquals.Name = "rdbPrivOperatorEquals";
+            this.rdbPrivOperatorEquals.Size = new System.Drawing.Size(230, 36);
+            this.rdbPrivOperatorEquals.TabIndex = 2;
+            this.rdbPrivOperatorEquals.TabStop = true;
+            this.rdbPrivOperatorEquals.Tag = "";
+            this.rdbPrivOperatorEquals.Text = "Equals";
+            this.rdbPrivOperatorEquals.UseVisualStyleBackColor = true;
+            this.rdbPrivOperatorEquals.Click += new System.EventHandler(this.rdbPrivOperatorLessThan_Click);
+            // 
+            // rdbPrivOperatorGreaterOrEquals
+            // 
+            this.rdbPrivOperatorGreaterOrEquals.AutoSize = true;
+            this.rdbPrivOperatorGreaterOrEquals.Dock = System.Windows.Forms.DockStyle.Top;
+            this.rdbPrivOperatorGreaterOrEquals.Location = new System.Drawing.Point(6, 54);
+            this.rdbPrivOperatorGreaterOrEquals.Name = "rdbPrivOperatorGreaterOrEquals";
+            this.rdbPrivOperatorGreaterOrEquals.Size = new System.Drawing.Size(230, 36);
+            this.rdbPrivOperatorGreaterOrEquals.TabIndex = 1;
+            this.rdbPrivOperatorGreaterOrEquals.Text = "Greater or eq.";
+            this.rdbPrivOperatorGreaterOrEquals.UseVisualStyleBackColor = true;
+            this.rdbPrivOperatorGreaterOrEquals.Click += new System.EventHandler(this.rdbPrivOperatorLessThan_Click);
+            // 
+            // rdbPrivOperatorCreaterThan
+            // 
+            this.rdbPrivOperatorCreaterThan.AutoSize = true;
+            this.rdbPrivOperatorCreaterThan.Dock = System.Windows.Forms.DockStyle.Top;
+            this.rdbPrivOperatorCreaterThan.Location = new System.Drawing.Point(6, 0);
+            this.rdbPrivOperatorCreaterThan.Name = "rdbPrivOperatorCreaterThan";
+            this.rdbPrivOperatorCreaterThan.Size = new System.Drawing.Size(230, 36);
+            this.rdbPrivOperatorCreaterThan.TabIndex = 0;
+            this.rdbPrivOperatorCreaterThan.Text = "Greater than";
+            this.rdbPrivOperatorCreaterThan.UseVisualStyleBackColor = true;
+            this.rdbPrivOperatorCreaterThan.Click += new System.EventHandler(this.rdbPrivOperatorLessThan_Click);
             // 
             // privilegeList
             // 
@@ -527,12 +615,15 @@
             this.gbSelectedPrivileges.ResumeLayout(false);
             this.gbResultingRoles.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.pnlPrivDepth.ResumeLayout(false);
+            this.pnlPrivDepth.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbLevelOrg)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbLevelSubDiv)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbLevelDiv)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbLevelUser)).EndInit();
+            this.pnlPrivOperators.ResumeLayout(false);
+            this.pnlPrivOperators.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -573,10 +664,17 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.RadioButton rdbLevelNone;
         private System.Windows.Forms.ImageList privilegeList;
-        private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.ColumnHeader columnHeader6;
         private System.Windows.Forms.ToolStripDropDownButton tsddbLoad;
         private System.Windows.Forms.ToolStripMenuItem tsmiLoadFromSolution;
         private System.Windows.Forms.ToolStripMenuItem tsmiLoadAll;
+        private System.Windows.Forms.Panel pnlPrivOperators;
+        private System.Windows.Forms.RadioButton rdbPrivOperatorLessThan;
+        private System.Windows.Forms.RadioButton rdbPrivOperatorLessOrEquals;
+        private System.Windows.Forms.RadioButton rdbPrivOperatorEquals;
+        private System.Windows.Forms.RadioButton rdbPrivOperatorGreaterOrEquals;
+        private System.Windows.Forms.RadioButton rdbPrivOperatorCreaterThan;
+        private System.Windows.Forms.Panel pnlPrivDepth;
+        private System.Windows.Forms.Panel pnlSeparator;
     }
 }

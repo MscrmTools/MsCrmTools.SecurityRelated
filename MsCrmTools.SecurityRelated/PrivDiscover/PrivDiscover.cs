@@ -51,7 +51,8 @@ namespace MsCrmTools.PrivDiscover
         {
             InitializeComponent();
 
-            comboBox1.SelectedIndex = 0;
+            pnlSeparator.Height = 1;
+            btnAdd.Top = panel1.Top + panel1.Height + 10;
         }
 
         #endregion Constructor
@@ -150,21 +151,18 @@ namespace MsCrmTools.PrivDiscover
                 }
 
                 var clonedItem = (ListViewItem)item.Clone();
-                clonedItem.SubItems.Add(comboBox1.SelectedItem?.ToString());
+                //clonedItem.SubItems.Add(comboBox1.SelectedItem?.ToString());
+                clonedItem.SubItems.Add(pnlPrivOperators.Controls.OfType<RadioButton>().First(rb => rb.Checked).Text);
                 clonedItem.SubItems.Add(priv.IsAnyDepth ? "Any" : priv.IsNoDepth ? "None" : GetPrivilegeDepthLabel(priv.Depth));
                 clonedItem.Tag = priv;
                 clonedItem.Group =
                     groupName != null
-                        //? ListViewDelegates.GetGroup(lvSelectedPrivileges, groupName)
-                        //: ListViewDelegates.GetGroup(lvSelectedPrivileges, "_Common");
                         ? lvSelectedPrivileges.Groups[groupName]
                         : lvSelectedPrivileges.Groups["_Common"];
 
                 lvSelectedPrivileges.Items.Add(clonedItem);
             }
 
-            //ListViewDelegates.SortGroup(lvSelectedPrivileges, true);
-            //ListViewDelegates.Sort(lvSelectedPrivileges, true);
             ((ListViewGroupSorter)lvSelectedPrivileges).SortGroups(true);
             lvSelectedPrivileges.Sort();
         }
@@ -461,7 +459,7 @@ namespace MsCrmTools.PrivDiscover
                             }
                         }
                     }
-                    else if (conditionOperator == "Lower than")
+                    else if (conditionOperator == "Lower than" || conditionOperator == "Less than")
                     {
                         Privilege privFound;
                         switch (currentPrivilege.Depth)
@@ -525,7 +523,7 @@ namespace MsCrmTools.PrivDiscover
                                 break;
                         }
                     }
-                    else if (conditionOperator == "Lower or eq.")
+                    else if (conditionOperator == "Lower or eq." || conditionOperator == "Less or eq.")
                     {
                         if (currentPrivilege.IsNoDepth)
                         {
@@ -647,38 +645,6 @@ namespace MsCrmTools.PrivDiscover
                 return;
 
             ConnectionDetail.OpenUrlWithBrowserProfile(new Uri(string.Format("{0}/biz/roles/edit.aspx?id={1}", ConnectionDetail.OriginalUrl, (Guid)lvRoles.SelectedItems[0].Tag)));
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            rdbLevelAny.Enabled = true;
-            rdbLevelOrg.Enabled = true;
-            rdbLevelNone.Enabled = true;
-
-            if (comboBox1.SelectedItem?.ToString() == "Greater than")
-            {
-                rdbLevelAny.Enabled = false;
-                rdbLevelOrg.Enabled = false;
-                rdbLevelAny.Checked = false;
-                rdbLevelOrg.Checked = false;
-            }
-            else if (comboBox1.SelectedItem?.ToString() == "Greater or eq.")
-            {
-                rdbLevelAny.Enabled = false;
-                rdbLevelAny.Checked = false;
-            }
-            else if (comboBox1.SelectedItem?.ToString() == "Lower than")
-            {
-                rdbLevelAny.Enabled = false;
-                rdbLevelNone.Enabled = false;
-                rdbLevelAny.Checked = false;
-                rdbLevelNone.Checked = false;
-            }
-            else if (comboBox1.SelectedItem?.ToString() == "Lower or eq.")
-            {
-                rdbLevelAny.Enabled = false;
-                rdbLevelAny.Checked = false;
-            }
         }
 
         private void ComputeListItems()
@@ -913,6 +879,40 @@ namespace MsCrmTools.PrivDiscover
         private void LvSelectedPrivilegesMouseDoubleClick(object sender, MouseEventArgs e)
         {
             BtnRemoveClick(null, null);
+        }
+
+        private void rdbPrivOperatorLessThan_Click(object sender, EventArgs e)
+        {
+            rdbLevelAny.Enabled = true;
+            rdbLevelOrg.Enabled = true;
+            rdbLevelNone.Enabled = true;
+
+            var operatorValue = pnlPrivOperators.Controls.OfType<RadioButton>().First(rb => rb.Checked).Text;//comboBox1.SelectedItem?.ToString();
+
+            if (operatorValue == "Greater than")
+            {
+                rdbLevelAny.Enabled = false;
+                rdbLevelOrg.Enabled = false;
+                rdbLevelAny.Checked = false;
+                rdbLevelOrg.Checked = false;
+            }
+            else if (operatorValue == "Greater or eq.")
+            {
+                rdbLevelAny.Enabled = false;
+                rdbLevelAny.Checked = false;
+            }
+            else if (operatorValue == "Lower than" || operatorValue == "Less than")
+            {
+                rdbLevelAny.Enabled = false;
+                rdbLevelNone.Enabled = false;
+                rdbLevelAny.Checked = false;
+                rdbLevelNone.Checked = false;
+            }
+            else if (operatorValue == "Lower or eq." || operatorValue == "Less or eq.")
+            {
+                rdbLevelAny.Enabled = false;
+                rdbLevelAny.Checked = false;
+            }
         }
 
         private void tsddbLoad_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
