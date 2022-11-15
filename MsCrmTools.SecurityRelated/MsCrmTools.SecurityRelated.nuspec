@@ -12,10 +12,9 @@
     <description>Set of tools for XrmToolBox regarding security management</description>
     <summary>Set of tools for XrmToolBox regarding security management</summary>
     <releaseNotes>
-      Privileges Discovery : Optimized performance for roles and privileges loading
-      Privileges Discovery : Optimized performance for privileges search
-      Privileges Discovery : Changed operator selection with a radio button list for a better experience
-      Privileges Discovery : Roles can now be opened in connection selected browser profile
+      Privileges Discovery : Fixed search of roles for privilege depth User and operator Greater than (#18)
+      Privileges Discovery : Fixed retrieval of roles and privileges
+      Privileges Discovery : Optimized privileges search
     </releaseNotes>
     <tags>XrmToolBox Plugin Security Related</tags>
     <dependencies>

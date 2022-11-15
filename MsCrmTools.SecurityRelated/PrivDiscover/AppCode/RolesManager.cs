@@ -49,45 +49,68 @@ namespace MsCrmTools.PrivDiscover.AppCode
         {
             var list = new List<SecurityRole>();
 
-            var qe = new QueryExpression("role") { Criteria = new FilterExpression(), ColumnSet = new ColumnSet("name") };
-            qe.Criteria.AddCondition("parentroleid", ConditionOperator.Null);
-            qe.PageInfo = new PagingInfo
+            var qe = new QueryExpression("roleprivileges")
             {
-                Count = 5000,
-                PageNumber = 1
-            };
-            qe.LinkEntities.Add(new LinkEntity
-            {
-                LinkFromEntityName = "systemuserroles",
-                LinkFromAttributeName = "roleid",
-                LinkToAttributeName = "roleid",
-                LinkToEntityName = "role",
-
+                ColumnSet = new ColumnSet("privilegedepthmask", "privilegeid"),
                 LinkEntities =
-                            {
-                                new LinkEntity
-                                {
-                                  EntityAlias = "priv",
-                                  LinkFromEntityName = "role",
-                                    LinkFromAttributeName = "roleid",
-                                    LinkToAttributeName = "roleid",
-                                    LinkToEntityName = "roleprivileges",
-                                    Columns = new ColumnSet("privilegedepthmask"),
-                                    LinkEntities =
-                                    {
-                                        new LinkEntity
-                                        {
-                                            EntityAlias = "privDef",
-                                            LinkFromEntityName = "roleprivileges",
-                                            LinkFromAttributeName = "privilegeid",
-                                            LinkToAttributeName = "privilegeid",
-                                            LinkToEntityName = "privilege",
-                                            Columns = new ColumnSet("privilegeid")
-                                        }
-                                    }
-                                }
-                            }
-            });
+                {
+                    new LinkEntity
+                    {
+                         EntityAlias = "role",
+                        LinkFromEntityName = "roleprivileges",
+                        LinkFromAttributeName = "roleid",
+                        LinkToAttributeName = "roleid",
+                        LinkToEntityName = "role",
+                        Columns = new ColumnSet("name","roleid"),
+                    }
+                },
+                PageInfo = new PagingInfo
+                {
+                    Count = 5000,
+                    PageNumber = 1
+                }
+            };
+
+            //var qe = new QueryExpression("role") { Criteria = new FilterExpression(), ColumnSet = new ColumnSet("name") };
+            //qe.Criteria.AddCondition("parentroleid", ConditionOperator.Null);
+            //qe.Criteria.AddCondition("name", ConditionOperator.Equal, "Administrateur système");
+            //qe.PageInfo = new PagingInfo
+            //{
+            //    Count = 5000,
+            //    PageNumber = 1
+            //};
+            //qe.LinkEntities.Add(new LinkEntity
+            //{
+            //    //LinkFromEntityName = "systemuserroles",
+            //    //LinkFromAttributeName = "roleid",
+            //    //LinkToAttributeName = "roleid",
+            //    //LinkToEntityName = "role",
+
+            //    //LinkEntities =
+            //    //            {
+            //    //                new LinkEntity
+            //    //                {
+            //    EntityAlias = "priv",
+            //    LinkFromEntityName = "role",
+            //    LinkFromAttributeName = "roleid",
+            //    LinkToAttributeName = "roleid",
+            //    LinkToEntityName = "roleprivileges",
+            //    Columns = new ColumnSet("privilegedepthmask", "privilegeid"),
+            //    //LinkEntities =
+            //    //{
+            //    //    new LinkEntity
+            //    //    {
+            //    //        EntityAlias = "privDef",
+            //    //        LinkFromEntityName = "roleprivileges",
+            //    //        LinkFromAttributeName = "privilegeid",
+            //    //        LinkToAttributeName = "privilegeid",
+            //    //        LinkToEntityName = "privilege",
+            //    //        Columns = new ColumnSet("privilegeid")
+            //    //    }
+            //    //}
+            //    //}
+            //    //}
+            //});
 
             var list2 = new List<Entity>();
             EntityCollection ec;
@@ -103,28 +126,32 @@ namespace MsCrmTools.PrivDiscover.AppCode
             }
             while (ec.MoreRecords);
 
-            var roles = list2.GroupBy(l => l.Id);
+            var roles = list2.GroupBy(l => (Guid)l.GetAttributeValue<AliasedValue>("role.roleid").Value);
 
             foreach (var role in roles)
             {
                 var sr = new SecurityRole
                 {
                     Id = role.Key,
-                    Name = role.First().GetAttributeValue<string>("name"),
+                    Name = role.First().GetAttributeValue<AliasedValue>("role.name").Value.ToString(),
                     Privileges = new List<Privilege>()
                 };
 
                 foreach (var roleprivilege in role)
                 {
                     PrivilegeDepth depth = 0;
-                    switch ((int)roleprivilege.GetAttributeValue<AliasedValue>("priv.privilegedepthmask").Value)
+                    switch (roleprivilege.GetAttributeValue<int>("privilegedepthmask"))
                     {
-                        case 2:
+                        case 1:
                             depth = PrivilegeDepth.Basic;
                             break;
 
-                        case 4:
+                        case 2:
                             depth = PrivilegeDepth.Local;
+                            break;
+
+                        case 4:
+                            depth = PrivilegeDepth.Deep;
                             break;
 
                         case 8:
@@ -134,7 +161,7 @@ namespace MsCrmTools.PrivDiscover.AppCode
 
                     sr.Privileges.Add(new Privilege
                     {
-                        Id = (Guid)roleprivilege.GetAttributeValue<AliasedValue>("privDef.privilegeid").Value,
+                        Id = roleprivilege.GetAttributeValue<Guid>("privilegeid"),
                         Depth = depth
                     });
                 }
