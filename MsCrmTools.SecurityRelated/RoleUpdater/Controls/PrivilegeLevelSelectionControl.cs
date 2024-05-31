@@ -97,11 +97,11 @@ namespace MsCrmTools.RoleUpdater.Controls
                 lblAlreadyAdded.Visible = false;
 
                 actions.Add(new PrivilegeAction
-                                 {
-                                     Level = level,
-                                     PrivilegeId = privilege.Id,
-                                     PrivilegeName = privilege["name"].ToString()
-                                 });
+                {
+                    Level = level,
+                    PrivilegeId = privilege.Id,
+                    PrivilegeName = privilege["name"].ToString()
+                });
 
                 var item = new ListViewItem(privilege["name"].ToString());
                 item.SubItems.Add(privilegeLevelName);
@@ -207,8 +207,8 @@ namespace MsCrmTools.RoleUpdater.Controls
                 string entitySchemaName = null;
                 var groupName = string.Empty;
                 var entitiesWithPrivilege = (from emd in entities
-                             where emd.Privileges.Any(p => p.PrivilegeId == privilege.Id)
-                             select emd).ToList();
+                                             where emd.Privileges.Any(p => p.PrivilegeId == privilege.Id)
+                                             select emd).ToList();
                 EntityMetadata entity;
                 if (entitiesWithPrivilege.Count > 0 && entitiesWithPrivilege.Any(g => g.IsActivity.Value))
                 {
@@ -239,11 +239,10 @@ namespace MsCrmTools.RoleUpdater.Controls
                 }
                 else
                 {
-                    
                     if (entity.LogicalName == "customeraddress")
                         groupName =
                             entities.First(x => x.LogicalName == "account").DisplayName.UserLocalizedLabel.Label;
-                    else if(entity.IsActivity.Value || entity.LogicalName == "bulkoperation")
+                    else if (entity.IsActivity.Value || entity.LogicalName == "bulkoperation")
                     {
                         groupName =
                             entities.First(x => x.LogicalName == "activitypointer").DisplayName.UserLocalizedLabel.Label;
@@ -267,7 +266,6 @@ namespace MsCrmTools.RoleUpdater.Controls
 
                 if (entitySchemaName != null)
                     item.Text = item.Text.Replace(entitySchemaName, "");
-
 
                 items.Add(item);
             }
@@ -308,8 +306,8 @@ namespace MsCrmTools.RoleUpdater.Controls
                     canBeGlobal = false;
             }
 
-            btnAddUserLevel.Enabled = canBeLocal;
-            btnAddBusinessUnitLevel.Enabled = canBeBasic;
+            btnAddUserLevel.Enabled = canBeBasic;
+            btnAddBusinessUnitLevel.Enabled = canBeLocal;
             btnAddParentChildLevel.Enabled = canBeDeep;
             btnAddOrganizationLevel.Enabled = canBeGlobal;
         }
